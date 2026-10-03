@@ -86,7 +86,7 @@ def register():
 @app.route('/make-admin')
 def make_admin():
 
-    email = "naveen@gmail.com"
+    email = "admin@gmail.com"
 
     user = User.query.filter_by(email=email).first()
 
