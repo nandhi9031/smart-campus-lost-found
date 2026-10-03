@@ -78,7 +78,28 @@ def register():
 
     return render_template('register.html')
 
+# ============================================================
+# TEMPORARY ADMIN SETUP
+# ============================================================
 
+@app.route('/make-admin')
+def make_admin():
+
+    email = "naveen@gmail.com"
+
+    user = User.query.filter_by(email=email).first()
+
+    if not user:
+        return "User not found!"
+
+    user.role = "Admin"
+    db.session.commit()
+
+    return """
+    <h2>Admin setup successful!</h2>
+    <p>naveen@gmail.com is now an Admin.</p>
+    <a href="/login">Go to Login</a>
+    """
 # ============================================================
 # LOGIN
 # ============================================================
