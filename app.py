@@ -94,7 +94,7 @@ def make_admin():
         return "User not found!"
 
     user.role = "Admin"
-    user.password = "Admin@123"
+    user.password = "admin123"
 
     db.session.commit()
 
