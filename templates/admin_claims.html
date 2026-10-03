@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Admin - Claims</title>
+
+</head>
+
+<body>
+
+<h2>Admin Claim Verification</h2>
+
+{% if claims %}
+
+    {% for claim in claims %}
+
+        <hr>
+
+        <h3>Claim #{{ claim.id }}</h3>
+
+        <p>
+            <strong>Claimant:</strong>
+            {{ claim.claimant.name }}
+        </p>
+
+        <p>
+            <strong>Email:</strong>
+            {{ claim.claimant.email }}
+        </p>
+
+        <p>
+            <strong>Found Item:</strong>
+            {{ claim.item.title }}
+        </p>
+
+        <p>
+            <strong>Description:</strong>
+            {{ claim.item.description }}
+        </p>
+
+        <p>
+            <strong>Location:</strong>
+            {{ claim.item.location }}
+        </p>
+
+        <p>
+            <strong>Status:</strong>
+            {{ claim.status }}
+        </p>
+
+        {% if claim.item.image %}
+
+            <img
+                src="{{ url_for(
+                    'static',
+                    filename='uploads/' + claim.item.image
+                ) }}"
+                width="200"
+            >
+
+        {% endif %}
+
+        {% if claim.status == 'Pending' %}
+
+            <br><br>
+
+            <a href="{{ url_for(
+                'approve_claim',
+                claim_id=claim.id
+            ) }}">
+                <button>Approve Claim</button>
+            </a>
+
+            <a href="{{ url_for(
+                'reject_claim',
+                claim_id=claim.id
+            ) }}">
+                <button>Reject Claim</button>
+            </a>
+
+        {% endif %}
+
+    {% endfor %}
+
+{% else %}
+
+    <p>No claims submitted yet.</p>
+
+{% endif %}
+
+<br>
+
+<a href="/dashboard">Back to Dashboard</a>
+
+</body>
+
+</html>

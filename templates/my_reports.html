@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>My Reports</title>
+</head>
+
+<body>
+
+<h2>My Lost and Found Reports</h2>
+
+{% if reports %}
+
+    {% for report in reports %}
+
+        <hr>
+
+        <h3>{{ report.report_type }}: {{ report.title }}</h3>
+
+        <p>
+            <strong>Description:</strong>
+            {{ report.description }}
+        </p>
+
+        <p>
+            <strong>Category:</strong>
+            {{ report.category }}
+        </p>
+
+        <p>
+            <strong>Color:</strong>
+            {{ report.color }}
+        </p>
+
+        <p>
+            <strong>Location:</strong>
+            {{ report.location }}
+        </p>
+
+        <p>
+            <strong>Date:</strong>
+            {{ report.date }}
+        </p>
+
+        <p>
+            <strong>Status:</strong>
+            {{ report.status }}
+        </p>
+
+        {% if report.image %}
+            <img
+                src="{{ url_for('static',
+                         filename='uploads/' + report.image) }}"
+                width="200"
+            >
+        {% endif %}
+
+    {% endfor %}
+
+{% else %}
+
+    <p>You have not submitted any reports yet.</p>
+
+{% endif %}
+
+<br>
+
+<a href="/dashboard">Back to Dashboard</a>
+
+</body>
+
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Dashboard</title>
+
+</head>
+
+<body>
+
+<h2>Welcome, {{ name }}!</h2>
+
+<p>Smart Campus Lost and Found System</p>
+
+<hr>
+
+<h3>Report an Item</h3>
+
+<a href="/report/lost">
+    <button>Report Lost Item</button>
+</a>
+
+<a href="/report/found">
+    <button>Report Found Item</button>
+</a>
+
+<br><br>
+
+<a href="/my-reports">
+    <button>View My Reports</button>
+</a>
+
+<a href="/matches">
+    <button>AI Find Possible Matches</button>
+</a>
+
+<br><br>
+
+
+{% if role == 'Admin' %}
+
+<hr>
+
+<h3>Admin Panel</h3>
+
+<a href="/admin/claims">
+    <button>Manage Claims</button>
+</a>
+
+{% endif %}
+
+
+<br><br>
+
+<a href="/logout">
+    <button>Logout</button>
+</a>
+
+</body>
+
+</html>

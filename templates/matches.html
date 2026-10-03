@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>AI Possible Matches</title>
+
+</head>
+
+<body>
+
+<h2>AI-Powered Lost and Found Matching</h2>
+
+<p>
+    The AI system compares text, images, category,
+    color, location and date.
+</p>
+
+<hr>
+
+{% if matches %}
+
+    <h2>Possible Matches</h2>
+
+    {% for match in matches %}
+
+        <hr>
+
+        <h3>{{ match.level }}</h3>
+
+        <h2>
+            Match Score: {{ match.score }}%
+        </h2>
+
+
+        <!-- LOST ITEM -->
+
+        <h3>Lost Item</h3>
+
+        <p>
+            <strong>Item:</strong>
+            {{ match.lost.title }}
+        </p>
+
+        <p>
+            <strong>Description:</strong>
+            {{ match.lost.description }}
+        </p>
+
+        <p>
+            <strong>Category:</strong>
+            {{ match.lost.category }}
+        </p>
+
+        <p>
+            <strong>Color:</strong>
+            {{ match.lost.color }}
+        </p>
+
+        <p>
+            <strong>Location:</strong>
+            {{ match.lost.location }}
+        </p>
+
+        <p>
+            <strong>Date:</strong>
+            {{ match.lost.date }}
+        </p>
+
+        {% if match.lost.image %}
+
+            <img
+                src="{{ url_for(
+                    'static',
+                    filename='uploads/' + match.lost.image
+                ) }}"
+                width="180"
+            >
+
+        {% endif %}
+
+
+        <!-- FOUND ITEM -->
+
+        <h3>Found Item</h3>
+
+        <p>
+            <strong>Item:</strong>
+            {{ match.found.title }}
+        </p>
+
+        <p>
+            <strong>Description:</strong>
+            {{ match.found.description }}
+        </p>
+
+        <p>
+            <strong>Category:</strong>
+            {{ match.found.category }}
+        </p>
+
+        <p>
+            <strong>Color:</strong>
+            {{ match.found.color }}
+        </p>
+
+        <p>
+            <strong>Location:</strong>
+            {{ match.found.location }}
+        </p>
+
+        <p>
+            <strong>Date:</strong>
+            {{ match.found.date }}
+        </p>
+
+        {% if match.found.image %}
+
+            <img
+                src="{{ url_for(
+                    'static',
+                    filename='uploads/' + match.found.image
+                ) }}"
+                width="180"
+            >
+
+        {% endif %}
+        <br>
+
+        <a href="{{ url_for('claim_item', item_id=match.found.id) }}">
+            <button>Claim This Item</button>
+        </a>
+
+
+        <!-- AI FACTORS -->
+
+        <h3>AI Matching Factors</h3>
+
+        <p>
+            Text Similarity:
+            {{ match.text }}%
+        </p>
+
+        <p>
+            Image Similarity:
+            {{ match.image }}%
+        </p>
+
+        <p>
+            Category Match:
+            {{ match.category }}%
+        </p>
+
+        <p>
+            Color Match:
+            {{ match.color }}%
+        </p>
+
+        <p>
+            Location Match:
+            {{ match.location }}%
+        </p>
+
+        <p>
+            Date Match:
+            {{ match.date }}%
+        </p>
+
+    {% endfor %}
+
+{% else %}
+
+    <h3>No strong matches found.</h3>
+
+    <p>
+        The AI system did not find any candidate
+        with a score of 60% or above.
+    </p>
+
+{% endif %}
+
+
+<br>
+
+<a href="/dashboard">
+    Back to Dashboard
+</a>
+
+</body>
+
+</html>
