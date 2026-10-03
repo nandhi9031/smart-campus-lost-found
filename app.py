@@ -86,7 +86,7 @@ def register():
 @app.route('/make-admin')
 def make_admin():
 
-    email = "admin@gmail.com"
+    email = "testuser123@gmail.com"
 
     user = User.query.filter_by(email=email).first()
 
@@ -100,7 +100,7 @@ def make_admin():
 
     return """
     <h2>Admin setup successful!</h2>
-    <p>Email: naveen@gmail.com</p>
+    <p>Email: testuser123@gmail.com</p>
     <p>Temporary Password: Admin@123</p>
     <p>Role: Admin</p>
     <a href="/login">Go to Login</a>
