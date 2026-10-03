@@ -94,11 +94,15 @@ def make_admin():
         return "User not found!"
 
     user.role = "Admin"
+    user.password = "Admin@123"
+
     db.session.commit()
 
     return """
     <h2>Admin setup successful!</h2>
-    <p>naveen@gmail.com is now an Admin.</p>
+    <p>Email: naveen@gmail.com</p>
+    <p>Temporary Password: Admin@123</p>
+    <p>Role: Admin</p>
     <a href="/login">Go to Login</a>
     """
 # ============================================================
