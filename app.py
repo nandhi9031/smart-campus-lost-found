@@ -68,7 +68,8 @@ def register():
         user = User(
             name=name,
             email=email,
-            password=password
+            password=password,
+            role='User'
         )
 
         db.session.add(user)
