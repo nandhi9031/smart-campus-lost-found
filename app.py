@@ -1,5 +1,6 @@
 import os
 import uuid
+import base64
 import json
 
 from flask import Flask, render_template, request, redirect, url_for, session
@@ -153,6 +154,86 @@ def save_uploaded_image(image):
 # PUSH NOTIFICATION
 # ============================================================
 
+def get_vapid_private_key():
+
+    # --------------------------------------------------------
+    # PRODUCTION: Render Environment Variable
+    # --------------------------------------------------------
+
+    vapid_key_base64 = os.getenv(
+        "VAPID_PRIVATE_KEY_B64"
+    )
+
+    if vapid_key_base64:
+
+        try:
+
+            vapid_key_bytes = base64.b64decode(
+                vapid_key_base64
+            )
+
+            vapid_key_path = os.path.join(
+                app.instance_path,
+                "vapid_private_key.pem"
+            )
+
+            os.makedirs(
+                app.instance_path,
+                exist_ok=True
+            )
+
+            with open(
+                vapid_key_path,
+                "wb"
+            ) as key_file:
+
+                key_file.write(
+                    vapid_key_bytes
+                )
+
+            return vapid_key_path
+
+        except Exception as e:
+
+            print(
+                "Error loading VAPID key from environment:",
+                e
+            )
+
+            return None
+
+
+    # --------------------------------------------------------
+    # LOCAL DEVELOPMENT: private_key.pem
+    # --------------------------------------------------------
+
+    local_key_path = os.path.join(
+        app.root_path,
+        "private_key.pem"
+    )
+
+    if os.path.exists(
+        local_key_path
+    ):
+
+        return local_key_path
+
+
+    # --------------------------------------------------------
+    # NO KEY AVAILABLE
+    # --------------------------------------------------------
+
+    print(
+        "VAPID private key not found."
+    )
+
+    return None
+
+
+# ============================================================
+# SEND PUSH NOTIFICATION
+# ============================================================
+
 def send_push_notification(
     recipient_id,
     title,
@@ -163,6 +244,35 @@ def send_push_notification(
         user_id=recipient_id
     ).all()
 
+    if not subscriptions:
+
+        print(
+            "No push subscription found for user:",
+            recipient_id
+        )
+
+        return
+
+
+    # --------------------------------------------------------
+    # GET VAPID PRIVATE KEY
+    # --------------------------------------------------------
+
+    vapid_private_key = get_vapid_private_key()
+
+    if not vapid_private_key:
+
+        print(
+            "Push notification skipped: VAPID key unavailable."
+        )
+
+        return
+
+
+    # --------------------------------------------------------
+    # SEND TO ALL USER DEVICES
+    # --------------------------------------------------------
+
     for subscription in subscriptions:
 
         try:
@@ -170,33 +280,42 @@ def send_push_notification(
             webpush(
 
                 subscription_info={
+
                     "endpoint": subscription.endpoint,
 
                     "keys": {
+
                         "p256dh": subscription.p256dh,
+
                         "auth": subscription.auth
+
                     }
+
                 },
 
                 data=json.dumps({
+
                     "title": title,
+
                     "message": message
+
                 }),
 
-                vapid_private_key=os.path.join(
-                    app.root_path,
-                    "private_key.pem"
-                ),
+                vapid_private_key=vapid_private_key,
 
                 vapid_claims={
+
                     "sub": "mailto:test@example.com"
+
                 }
+
             )
 
             print(
                 "Push notification sent to user:",
                 recipient_id
             )
+
 
         except WebPushException as e:
 
@@ -205,6 +324,7 @@ def send_push_notification(
                 e
             )
 
+
         except Exception as e:
 
             print(
@@ -212,6 +332,10 @@ def send_push_notification(
                 e
             )
 
+
+# ============================================================
+# CREATE DATABASE NOTIFICATION
+# ============================================================
 
 def create_notification(
     recipient_id,
@@ -234,14 +358,25 @@ def create_notification(
         item_id=item_id,
 
         is_read=False
+
     )
 
-    db.session.add(notification)
+    db.session.add(
+        notification
+    )
+
+    # --------------------------------------------------------
+    # SEND BROWSER PUSH
+    # --------------------------------------------------------
 
     send_push_notification(
+
         recipient_id=recipient_id,
+
         title=title,
+
         message=message
+
     )
 
 
@@ -255,36 +390,78 @@ def create_notification(
 )
 def save_push_subscription():
 
+    # --------------------------------------------------------
+    # CHECK LOGIN
+    # --------------------------------------------------------
+
     if 'user_id' not in session:
 
         return {
+
             "success": False,
+
             "message": "User not logged in"
+
         }, 401
+
+
+    # --------------------------------------------------------
+    # READ JSON DATA
+    # --------------------------------------------------------
 
     data = request.get_json()
 
-    endpoint = data.get('endpoint')
+    if not data:
+
+        return {
+
+            "success": False,
+
+            "message": "Invalid request data"
+
+        }, 400
+
+
+    # --------------------------------------------------------
+    # GET SUBSCRIPTION DATA
+    # --------------------------------------------------------
+
+    endpoint = data.get(
+        "endpoint"
+    )
 
     keys = data.get(
-        'keys',
+        "keys",
         {}
     )
 
     p256dh = keys.get(
-        'p256dh'
+        "p256dh"
     )
 
     auth = keys.get(
-        'auth'
+        "auth"
     )
+
+
+    # --------------------------------------------------------
+    # VALIDATE SUBSCRIPTION
+    # --------------------------------------------------------
 
     if not endpoint or not p256dh or not auth:
 
         return {
+
             "success": False,
+
             "message": "Invalid subscription data"
+
         }, 400
+
+
+    # --------------------------------------------------------
+    # CHECK EXISTING SUBSCRIPTION
+    # --------------------------------------------------------
 
     existing = PushSubscription.query.filter_by(
         endpoint=endpoint
@@ -293,9 +470,17 @@ def save_push_subscription():
     if existing:
 
         return {
+
             "success": True,
+
             "message": "Subscription already saved"
+
         }
+
+
+    # --------------------------------------------------------
+    # SAVE NEW SUBSCRIPTION
+    # --------------------------------------------------------
 
     subscription = PushSubscription(
 
@@ -306,17 +491,23 @@ def save_push_subscription():
         p256dh=p256dh,
 
         auth=auth
+
     )
 
-    db.session.add(subscription)
+    db.session.add(
+        subscription
+    )
 
     db.session.commit()
 
-    return {
-        "success": True,
-        "message": "Push subscription saved"
-    }
 
+    return {
+
+        "success": True,
+
+        "message": "Push subscription saved"
+
+    }
 
 # ============================================================
 # HOME
