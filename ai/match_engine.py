@@ -4,6 +4,7 @@ from datetime import datetime
 from ai.text_matching import calculate_text_similarity
 from ai.image_matching import calculate_image_similarity
 
+
 # ============================================================
 # CATEGORY MATCH
 # ============================================================
@@ -43,8 +44,8 @@ def location_score(location1, location2):
     if not location1 or not location2:
         return 0
 
-    location1 = location1.lower()
-    location2 = location2.lower()
+    location1 = location1.lower().strip()
+    location2 = location2.lower().strip()
 
     words1 = set(location1.split())
     words2 = set(location2.split())
@@ -106,7 +107,7 @@ def date_score(date1, date2):
 def calculate_match(lost, found):
 
     # --------------------------------------------------------
-    # TEXT
+    # TEXT MATCHING
     # --------------------------------------------------------
 
     lost_text = (
@@ -132,7 +133,7 @@ def calculate_match(lost, found):
 
 
     # --------------------------------------------------------
-    # IMAGE
+    # IMAGE MATCHING
     # --------------------------------------------------------
 
     image = 0
@@ -164,7 +165,7 @@ def calculate_match(lost, found):
 
 
     # --------------------------------------------------------
-    # OTHER FACTORS
+    # OTHER MATCHING FACTORS
     # --------------------------------------------------------
 
     category = category_score(
@@ -188,25 +189,63 @@ def calculate_match(lost, found):
     )
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # FINAL WEIGHTED SCORE
-    # --------------------------------------------------------
+    # ========================================================
 
-    final_score = (
-        (text * 0.35) +
-        (image * 0.30) +
-        (category * 0.05) +
-        (color * 0.05) +
-        (location * 0.15) +
-        (date * 0.10)
-    )
+    if lost.image and found.image:
+
+        # ----------------------------------------------------
+        # IMAGE AVAILABLE
+        # ----------------------------------------------------
+        # Text     = 35%
+        # Image    = 30%
+        # Category = 5%
+        # Color    = 5%
+        # Location = 15%
+        # Date     = 10%
+        # Total    = 100%
+        # ----------------------------------------------------
+
+        final_score = (
+            (text * 0.35) +
+            (image * 0.30) +
+            (category * 0.05) +
+            (color * 0.05) +
+            (location * 0.15) +
+            (date * 0.10)
+        )
+
+    else:
+
+        # ----------------------------------------------------
+        # IMAGE NOT AVAILABLE
+        # ----------------------------------------------------
+        # Redistribute image weight.
+        #
+        # Text     = 55%
+        # Category = 15%
+        # Color    = 10%
+        # Location = 10%
+        # Date     = 10%
+        # Total    = 100%
+        # ----------------------------------------------------
+
+        final_score = (
+            (text * 0.55) +
+            (category * 0.15) +
+            (color * 0.10) +
+            (location * 0.10) +
+            (date * 0.10)
+        )
+
 
     final_score = round(final_score, 2)
 
 
-    # --------------------------------------------------------
+    # ========================================================
     # MATCH LEVEL
-    # --------------------------------------------------------
+    # ========================================================
 
     if final_score >= 90:
 
@@ -224,6 +263,10 @@ def calculate_match(lost, found):
 
         level = "Low Similarity"
 
+
+    # ========================================================
+    # RETURN MATCH RESULT
+    # ========================================================
 
     return {
 
