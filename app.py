@@ -1092,7 +1092,46 @@ def reject_claim(claim_id):
         url_for('admin_claims')
     )
 
+# ============================================================
+# TEMPORARY ADMIN SETUP
+# REMOVE THIS BLOCK AFTER ADMIN LOGIN WORKS ON RENDER
+# ============================================================
 
+def setup_production_admin():
+    from werkzeug.security import generate_password_hash
+
+    email = "testuser123@gmail.com"
+    password = os.getenv("ADMIN_SETUP_PASSWORD")
+
+    if not password:
+        return
+
+    with app.app_context():
+
+        user = User.query.filter_by(email=email).first()
+
+        if user:
+
+            user.role = "Admin"
+            user.password = generate_password_hash(password)
+
+        else:
+
+            user = User(
+                name="Admin",
+                email=email,
+                password=generate_password_hash(password),
+                role="Admin"
+            )
+
+            db.session.add(user)
+
+        db.session.commit()
+
+        print("Temporary production admin setup completed.")
+
+
+setup_production_admin()
 # ============================================================
 # RUN APPLICATION
 # ============================================================
