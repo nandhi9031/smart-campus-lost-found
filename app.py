@@ -866,26 +866,23 @@ def logout():
 def matches():
 
     if 'user_id' not in session:
-
-        return redirect(
-            url_for('login')
-        )
+        return redirect(url_for('login'))
 
     lost_items = ItemReport.query.filter_by(
-
         report_type='Lost',
-
         status='Active'
-
     ).all()
 
     found_items = ItemReport.query.filter_by(
-
         report_type='Found',
-
         status='Active'
-
     ).all()
+
+    print("================================")
+    print("AI MATCH DEBUG")
+    print("Lost items:", len(lost_items))
+    print("Found items:", len(found_items))
+    print("================================")
 
     match_results = []
 
@@ -893,7 +890,9 @@ def matches():
 
         for found in found_items:
 
-            # Don't compare an item with itself
+            print("Comparing:")
+            print("Lost ID:", lost.id)
+            print("Found ID:", found.id)
 
             if lost.id == found.id:
                 continue
@@ -903,51 +902,43 @@ def matches():
                 found
             )
 
-            # Keep meaningful matches
+            print("TEXT:", result['text'])
+            print("IMAGE:", result['image'])
+            print("CATEGORY:", result['category'])
+            print("COLOR:", result['color'])
+            print("LOCATION:", result['location'])
+            print("DATE:", result['date'])
+            print("FINAL SCORE:", result['final_score'])
+            print("LEVEL:", result['level'])
+            print("--------------------------------")
 
             if result['final_score'] >= 60:
 
                 match_results.append({
-
                     'lost': lost,
-
                     'found': found,
-
                     'score': result['final_score'],
-
                     'level': result['level'],
-
                     'text': result['text'],
-
                     'image': result['image'],
-
                     'category': result['category'],
-
                     'color': result['color'],
-
                     'location': result['location'],
-
                     'date': result['date']
-
                 })
 
-    # Highest score first
-
     match_results.sort(
-
         key=lambda x: x['score'],
-
         reverse=True
-
     )
+
+    print("TOTAL MATCHES:", len(match_results))
+    print("================================")
 
     return render_template(
-
         'matches.html',
-
         matches=match_results
     )
-
 
 # ============================================================
 # CLAIM ITEM
