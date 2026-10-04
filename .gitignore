@@ -3,3 +3,5 @@ _pycache_/
 *.pyc 
 instance/
 .env
+private_key.pem
+static/uploads/*

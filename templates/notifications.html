@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Notifications</title>
+</head>
+
+<body>
+
+<h2>Notifications</h2>
+
+{% if notifications %}
+
+    {% for notification in notifications %}
+
+        <div style="border:1px solid #ccc; padding:10px; margin:10px 0;">
+
+            <h3>{{ notification.title }}</h3>
+
+            <p>{{ notification.message }}</p>
+
+            <small>
+                {{ notification.created_at }}
+            </small>
+
+        </div>
+
+    {% endfor %}
+
+{% else %}
+
+    <p>No notifications found.</p>
+
+{% endif %}
+
+<br>
+
+<a href="/dashboard">Back to Dashboard</a>
+
+</body>
+
+</html>

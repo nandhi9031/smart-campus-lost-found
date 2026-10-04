@@ -65,19 +65,27 @@
 
             <br><br>
 
-            <a href="{{ url_for(
-                'approve_claim',
-                claim_id=claim.id
-            ) }}">
-                <button>Approve Claim</button>
-            </a>
+           <form
+                method="POST"
+                action="{{ url_for('approve_claim', claim_id=claim.id) }}"
+            >
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-            <a href="{{ url_for(
-                'reject_claim',
-                claim_id=claim.id
-            ) }}">
-                <button>Reject Claim</button>
-            </a>
+                <button type="submit">
+                    Approve
+                </button>
+            </form>
+
+            <form
+                method="POST"
+                action="{{ url_for('reject_claim', claim_id=claim.id) }}"
+            >
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <button type="submit">
+                    Reject
+                </button>
+            </form>
 
         {% endif %}
 

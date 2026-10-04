@@ -155,3 +155,104 @@ class Claim(db.Model):
         'User',
         backref='claims'
     )
+# ============================================================
+# NOTIFICATION MODEL
+# ============================================================
+
+class Notification(db.Model):
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    # User who receives the notification
+    recipient_id = db.Column(
+        db.Integer,
+        db.ForeignKey('user.id'),
+        nullable=False
+    )
+
+    # Notification title
+    title = db.Column(
+        db.String(150),
+        nullable=False
+    )
+
+    # Notification message
+    message = db.Column(
+        db.Text,
+        nullable=False
+    )
+
+    # lost_report / found_report / match / claim / admin
+    notification_type = db.Column(
+        db.String(50),
+        nullable=False
+    )
+
+    # Optional related item
+    item_id = db.Column(
+        db.Integer,
+        db.ForeignKey('item_report.id'),
+        nullable=True
+    )
+
+    # False = unread, True = read
+    is_read = db.Column(
+        db.Boolean,
+        default=False
+    )
+
+    created_at = db.Column(
+        db.DateTime,
+        default=datetime.utcnow
+    )
+
+    # Relationship with receiver
+    recipient = db.relationship(
+        'User',
+        backref='notifications'
+    )
+
+    # Relationship with item
+    item = db.relationship(
+        'ItemReport',
+        backref='notifications'
+    )
+# ============================================================
+# PUSH SUBSCRIPTION MODEL
+# ============================================================
+
+class PushSubscription(db.Model):
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('user.id'),
+        nullable=False
+    )
+
+    endpoint = db.Column(
+        db.Text,
+        nullable=False
+    )
+
+    p256dh = db.Column(
+        db.Text,
+        nullable=False
+    )
+
+    auth = db.Column(
+        db.Text,
+        nullable=False
+    )
+
+    user = db.relationship(
+        'User',
+        backref='push_subscriptions'
+    )

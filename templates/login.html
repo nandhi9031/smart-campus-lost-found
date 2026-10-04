@@ -9,6 +9,7 @@
 <h2>Student Login</h2>
 
 <form method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
     <label>Email:</label><br>
     <input type="email" name="email" required><br><br>

@@ -127,9 +127,16 @@
         {% endif %}
         <br>
 
-        <a href="{{ url_for('claim_item', item_id=match.found.id) }}">
-            <button>Claim This Item</button>
-        </a>
+        <form
+            method="POST"
+            action="{{ url_for('claim_item', item_id=match.found.id) }}"
+        >
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <button type="submit">
+                Claim This Item
+            </button>
+        </form>
 
 
         <!-- AI FACTORS -->
