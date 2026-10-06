@@ -151,28 +151,60 @@
                 </p>
 
 
+                
                 {% if report.image %}
 
-                    {% if report.image.startswith('http') %}
+                    <div style="margin-top: 15px;">
 
-                        <img
-                            src="{{ report.image }}"
-                            alt="{{ report.title }}"
-                        >
+                        <strong>Item Image:</strong>
 
-                    {% else %}
+                        {% if report.image.startswith('http://') or report.image.startswith('https://') %}
 
-                        <img
-                            src="{{ url_for(
-                                'static',
-                                filename='uploads/' + report.image
-                            ) }}"
-                            alt="{{ report.title }}"
-                        >
+                            <img
+                                src="{{ report.image }}"
+                                alt="{{ report.title }}"
+                                style="
+                                    width: 250px;
+                                    max-width: 100%;
+                                    height: auto;
+                                    display: block;
+                                    margin-top: 10px;
+                                    border-radius: 8px;
+                                    object-fit: contain;
+                                "
+                                loading="lazy"
+                            >
 
-                    {% endif %}
+                        {% else %}
+
+                            <img
+                                src="{{ url_for(
+                                    'static',
+                                    filename='uploads/' + report.image
+                                ) }}"
+                                alt="{{ report.title }}"
+                                style="
+                                    width: 250px;
+                                    max-width: 100%;
+                                    height: auto;
+                                    display: block;
+                                    margin-top: 10px;
+                                    border-radius: 8px;
+                                    object-fit: contain;
+                                "
+                                loading="lazy"
+                            >
+
+                        {% endif %}
+
+                    </div>
+
+                {% else %}
+
+                    <p><strong>Item Image:</strong> No image uploaded.</p>
 
                 {% endif %}
+                
 
 
                 {% if report.status == 'Pending Approval' %}
