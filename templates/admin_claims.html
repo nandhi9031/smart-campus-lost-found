@@ -50,15 +50,19 @@
         </p>
 
         {% if claim.item.image %}
-
-            <img
-                src="{{ url_for(
-                    'static',
-                    filename='uploads/' + claim.item.image
-                ) }}"
-                width="200"
-            >
-
+            {% if claim.item.image.startswith('http://') or claim.item.image.startswith('https://') %}
+                <img
+                    src="{{ claim.item.image }}"
+                    alt="Found Item"
+                    class="claim-image"
+                >
+            {% else %}
+                <img
+                    src="{{ url_for('static', filename='uploads/' + claim.item.image) }}"
+                    alt="Found Item"
+                    class="claim-image"
+                >
+            {% endif %}
         {% endif %}
 
         {% if claim.status == 'Pending' %}

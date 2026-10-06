@@ -1,8 +1,37 @@
+```html
 <!DOCTYPE html>
 <html>
 
 <head>
     <title>My Reports</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+        }
+
+        .report {
+            margin-bottom: 25px;
+        }
+
+        .report-image {
+            max-width: 300px;
+            max-height: 300px;
+            height: auto;
+            display: block;
+            margin-top: 10px;
+        }
+
+        .image-link {
+            display: inline-block;
+            margin-top: 8px;
+        }
+
+        hr {
+            margin: 25px 0;
+        }
+    </style>
 </head>
 
 <body>
@@ -13,47 +42,96 @@
 
     {% for report in reports %}
 
-        <hr>
+        <div class="report">
 
-        <h3>{{ report.report_type }}: {{ report.title }}</h3>
+            <hr>
 
-        <p>
-            <strong>Description:</strong>
-            {{ report.description }}
-        </p>
+            <h3>
+                {{ report.report_type }}: {{ report.title }}
+            </h3>
 
-        <p>
-            <strong>Category:</strong>
-            {{ report.category }}
-        </p>
+            <p>
+                <strong>Description:</strong>
+                {{ report.description }}
+            </p>
 
-        <p>
-            <strong>Color:</strong>
-            {{ report.color }}
-        </p>
+            <p>
+                <strong>Category:</strong>
+                {{ report.category }}
+            </p>
 
-        <p>
-            <strong>Location:</strong>
-            {{ report.location }}
-        </p>
+            <p>
+                <strong>Color:</strong>
+                {{ report.color }}
+            </p>
 
-        <p>
-            <strong>Date:</strong>
-            {{ report.date }}
-        </p>
+            <p>
+                <strong>Location:</strong>
+                {{ report.location }}
+            </p>
 
-        <p>
-            <strong>Status:</strong>
-            {{ report.status }}
-        </p>
+            <p>
+                <strong>Date:</strong>
+                {{ report.date }}
+            </p>
 
-        {% if report.image %}
-            <img
-                src="{{ url_for('static',
-                         filename='uploads/' + report.image) }}"
-                width="200"
-            >
-        {% endif %}
+            <p>
+                <strong>Status:</strong>
+                {{ report.status }}
+            </p>
+
+
+            <!-- IMAGE -->
+
+            {% if report.image %}
+
+                {% if report.image.startswith('http') %}
+
+                    <!-- Cloudinary image -->
+
+                    <img
+                        src="{{ report.image }}"
+                        alt="{{ report.title }}"
+                        class="report-image"
+                    >
+
+                    <a
+                        href="{{ report.image }}"
+                        target="_blank"
+                        class="image-link"
+                    >
+                        Open Image
+                    </a>
+
+                {% else %}
+
+                    <!-- Old local image -->
+
+                    <img
+                        src="{{ url_for(
+                            'static',
+                            filename='uploads/' + report.image
+                        ) }}"
+                        alt="{{ report.title }}"
+                        class="report-image"
+                    >
+
+                    <a
+                        href="{{ url_for(
+                            'static',
+                            filename='uploads/' + report.image
+                        ) }}"
+                        target="_blank"
+                        class="image-link"
+                    >
+                        Open Image
+                    </a>
+
+                {% endif %}
+
+            {% endif %}
+
+        </div>
 
     {% endfor %}
 
@@ -70,3 +148,4 @@
 </body>
 
 </html>
+```

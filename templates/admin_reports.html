@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Admin - Manage Reports</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            background: #f5f5f5;
+        }
+
+        .report {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .pending {
+            color: orange;
+            font-weight: bold;
+        }
+
+        .approved {
+            color: green;
+            font-weight: bold;
+        }
+
+        .rejected {
+            color: red;
+            font-weight: bold;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+
+        .approve {
+            background: green;
+            color: white;
+        }
+
+        .reject {
+            background: red;
+            color: white;
+        }
+
+        img {
+            max-width: 250px;
+            max-height: 250px;
+            display: block;
+            margin-top: 10px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <h1>Admin - Manage Reports</h1>
+
+    <a href="{{ url_for('dashboard') }}">
+        Back to Dashboard
+    </a>
+
+    <hr>
+
+    {% if reports %}
+
+        {% for report in reports %}
+
+            <div class="report">
+
+                <h2>
+                    {{ report.report_type }}:
+                    {{ report.title }}
+                </h2>
+
+                <p>
+                    <strong>User:</strong>
+                    {{ report.user.name }}
+                </p>
+
+                <p>
+                    <strong>Description:</strong>
+                    {{ report.description }}
+                </p>
+
+                <p>
+                    <strong>Category:</strong>
+                    {{ report.category }}
+                </p>
+
+                <p>
+                    <strong>Color:</strong>
+                    {{ report.color }}
+                </p>
+
+                <p>
+                    <strong>Location:</strong>
+                    {{ report.location }}
+                </p>
+
+                <p>
+                    <strong>Date:</strong>
+                    {{ report.date }}
+                </p>
+
+                <p>
+                    <strong>Status:</strong>
+
+                    {% if report.status == 'Pending Approval' %}
+
+                        <span class="pending">
+                            Pending Approval
+                        </span>
+
+                    {% elif report.status == 'Approved' %}
+
+                        <span class="approved">
+                            Approved
+                        </span>
+
+                    {% elif report.status == 'Rejected' %}
+
+                        <span class="rejected">
+                            Rejected
+                        </span>
+
+                    {% elif report.status == 'Claimed' %}
+
+                        <span class="approved">
+                            Claimed
+                        </span>
+
+                    {% else %}
+
+                        {{ report.status }}
+
+                    {% endif %}
+
+                </p>
+
+
+                {% if report.image %}
+
+                    {% if report.image.startswith('http') %}
+
+                        <img
+                            src="{{ report.image }}"
+                            alt="{{ report.title }}"
+                        >
+
+                    {% else %}
+
+                        <img
+                            src="{{ url_for(
+                                'static',
+                                filename='uploads/' + report.image
+                            ) }}"
+                            alt="{{ report.title }}"
+                        >
+
+                    {% endif %}
+
+                {% endif %}
+
+
+                {% if report.status == 'Pending Approval' %}
+
+                    <br>
+
+                    <form
+                        action="{{ url_for(
+                            'approve_report',
+                            report_id=report.id
+                        ) }}"
+                        method="POST"
+                        style="display:inline;"
+                    >
+
+                        <input
+                            type="hidden"
+                            name="csrf_token"
+                            value="{{ csrf_token() }}"
+                        >
+
+                        <button
+                            type="submit"
+                            class="approve"
+                        >
+                            Approve
+                        </button>
+
+                    </form>
+
+
+                    <form
+                        action="{{ url_for(
+                            'reject_report',
+                            report_id=report.id
+                        ) }}"
+                        method="POST"
+                        style="display:inline;"
+                    >
+
+                        <input
+                            type="hidden"
+                            name="csrf_token"
+                            value="{{ csrf_token() }}"
+                        >
+
+                        <button
+                            type="submit"
+                            class="reject"
+                        >
+                            Reject
+                        </button>
+
+                    </form>
+
+                {% endif %}
+
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <p>No reports available.</p>
+
+    {% endif %}
+
+</body>
+
+</html>

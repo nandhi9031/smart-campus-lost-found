@@ -41,7 +41,12 @@
     <br><br>
 
     <label>Date:</label><br>
-    <input type="date" name="date" required>
+    <input
+        type="date"
+        name="date"
+        max="{{ today }}"
+        required
+    >
     <br><br>
 
     <label>Upload Image:</label><br>

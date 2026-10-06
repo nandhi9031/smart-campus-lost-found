@@ -140,27 +140,39 @@ def calculate_match(lost, found):
 
     if lost.image and found.image:
 
-        base_folder = os.path.dirname(
-            os.path.dirname(os.path.abspath(__file__))
-        )
+        def resolve_image_source(image_value):
 
-        lost_image_path = os.path.join(
-            base_folder,
-            "static",
-            "uploads",
+            if image_value.startswith(
+                ("http://", "https://")
+            ):
+                return image_value
+
+            base_folder = os.path.dirname(
+                os.path.dirname(
+                    os.path.abspath(__file__)
+                )
+            )
+
+            return os.path.join(
+                base_folder,
+                "static",
+                "uploads",
+                image_value
+            )
+
+        lost_image_source = resolve_image_source(
             lost.image
         )
 
-        found_image_path = os.path.join(
-            base_folder,
-            "static",
-            "uploads",
+        found_image_source = resolve_image_source(
             found.image
         )
+        print("LOST IMAGE:", lost_image_source)
+        print("FOUND IMAGE:", found_image_source)
 
         image = calculate_image_similarity(
-            lost_image_path,
-            found_image_path
+            lost_image_source,
+            found_image_source
         )
 
 

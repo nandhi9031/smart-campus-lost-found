@@ -613,12 +613,7 @@ def login():
         password = request.form['password']
 
         user = User.query.filter_by(email=email).first()
-        print("LOGIN EMAIL:", email)
-        print("USER FOUND:", user is not None)
-
-        if user:
-            print("USER ROLE:", user.role)
-
+        
         if user and check_password_hash(user.password, password):
 
             # Store user information in session

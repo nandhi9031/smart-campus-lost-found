@@ -15,7 +15,13 @@
     <input type="text" name="name" required><br><br>
 
     <label>Email:</label><br>
-    <input type="email" name="email" required><br><br>
+    <input
+        type="email"
+        name="email"
+        pattern="[A-Za-z0-9._%+-]+@gmail\.com"
+        title="Please enter a valid Gmail address ending with @gmail.com"
+        required
+    >
 
     <label>Password:</label><br>
     <input type="password" name="password" required><br><br>

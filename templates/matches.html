@@ -1,9 +1,46 @@
+```html
 <!DOCTYPE html>
 <html>
 
 <head>
 
     <title>AI Possible Matches</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+        }
+
+        .match {
+            margin-bottom: 30px;
+        }
+
+        .item-image {
+            max-width: 300px;
+            max-height: 300px;
+            height: auto;
+            display: block;
+            margin-top: 10px;
+            border-radius: 8px;
+        }
+
+        .image-link {
+            display: inline-block;
+            margin-top: 8px;
+        }
+
+        .score {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        hr {
+            margin: 25px 0;
+        }
+
+    </style>
 
 </head>
 
@@ -18,162 +55,266 @@
 
 <hr>
 
+
 {% if matches %}
 
     <h2>Possible Matches</h2>
 
+
     {% for match in matches %}
 
-        <hr>
+        <div class="match">
 
-        <h3>{{ match.level }}</h3>
-
-        <h2>
-            Match Score: {{ match.score }}%
-        </h2>
+            <hr>
 
 
-        <!-- LOST ITEM -->
+            <!-- MATCH INFORMATION -->
 
-        <h3>Lost Item</h3>
+            <h3>
+                {{ match.level }}
+            </h3>
 
-        <p>
-            <strong>Item:</strong>
-            {{ match.lost.title }}
-        </p>
+            <p class="score">
+                Match Score: {{ match.score }}%
+            </p>
 
-        <p>
-            <strong>Description:</strong>
-            {{ match.lost.description }}
-        </p>
 
-        <p>
-            <strong>Category:</strong>
-            {{ match.lost.category }}
-        </p>
+            <!-- ====================================== -->
+            <!-- LOST ITEM -->
+            <!-- ====================================== -->
 
-        <p>
-            <strong>Color:</strong>
-            {{ match.lost.color }}
-        </p>
+            <h3>Lost Item</h3>
 
-        <p>
-            <strong>Location:</strong>
-            {{ match.lost.location }}
-        </p>
+            <p>
+                <strong>Item:</strong>
+                {{ match.lost.title }}
+            </p>
 
-        <p>
-            <strong>Date:</strong>
-            {{ match.lost.date }}
-        </p>
+            <p>
+                <strong>Description:</strong>
+                {{ match.lost.description }}
+            </p>
 
-        {% if match.lost.image %}
+            <p>
+                <strong>Category:</strong>
+                {{ match.lost.category }}
+            </p>
 
-            <img
-                src="{{ url_for(
-                    'static',
-                    filename='uploads/' + match.lost.image
+            <p>
+                <strong>Color:</strong>
+                {{ match.lost.color }}
+            </p>
+
+            <p>
+                <strong>Location:</strong>
+                {{ match.lost.location }}
+            </p>
+
+            <p>
+                <strong>Date:</strong>
+                {{ match.lost.date }}
+            </p>
+
+
+            <!-- LOST ITEM IMAGE -->
+
+            {% if match.lost.image %}
+
+                {% if match.lost.image.startswith('http') %}
+
+                    <img
+                        src="{{ match.lost.image }}"
+                        alt="{{ match.lost.title }}"
+                        class="item-image"
+                    >
+
+                    <a
+                        href="{{ match.lost.image }}"
+                        target="_blank"
+                        class="image-link"
+                    >
+                        Open Lost Item Image
+                    </a>
+
+                {% else %}
+
+                    <img
+                        src="{{ url_for(
+                            'static',
+                            filename='uploads/' + match.lost.image
+                        ) }}"
+                        alt="{{ match.lost.title }}"
+                        class="item-image"
+                    >
+
+                    <a
+                        href="{{ url_for(
+                            'static',
+                            filename='uploads/' + match.lost.image
+                        ) }}"
+                        target="_blank"
+                        class="image-link"
+                    >
+                        Open Lost Item Image
+                    </a>
+
+                {% endif %}
+
+            {% endif %}
+
+
+            <!-- ====================================== -->
+            <!-- FOUND ITEM -->
+            <!-- ====================================== -->
+
+            <h3>Found Item</h3>
+
+            <p>
+                <strong>Item:</strong>
+                {{ match.found.title }}
+            </p>
+
+            <p>
+                <strong>Description:</strong>
+                {{ match.found.description }}
+            </p>
+
+            <p>
+                <strong>Category:</strong>
+                {{ match.found.category }}
+            </p>
+
+            <p>
+                <strong>Color:</strong>
+                {{ match.found.color }}
+            </p>
+
+            <p>
+                <strong>Location:</strong>
+                {{ match.found.location }}
+            </p>
+
+            <p>
+                <strong>Date:</strong>
+                {{ match.found.date }}
+            </p>
+
+
+            <!-- FOUND ITEM IMAGE -->
+
+            {% if match.found.image %}
+
+                {% if match.found.image.startswith('http') %}
+
+                    <img
+                        src="{{ match.found.image }}"
+                        alt="{{ match.found.title }}"
+                        class="item-image"
+                    >
+
+                    <a
+                        href="{{ match.found.image }}"
+                        target="_blank"
+                        class="image-link"
+                    >
+                        Open Found Item Image
+                    </a>
+
+                {% else %}
+
+                    <img
+                        src="{{ url_for(
+                            'static',
+                            filename='uploads/' + match.found.image
+                        ) }}"
+                        alt="{{ match.found.title }}"
+                        class="item-image"
+                    >
+
+                    <a
+                        href="{{ url_for(
+                            'static',
+                            filename='uploads/' + match.found.image
+                        ) }}"
+                        target="_blank"
+                        class="image-link"
+                    >
+                        Open Found Item Image
+                    </a>
+
+                {% endif %}
+
+            {% endif %}
+
+
+            <br><br>
+
+
+            <!-- ====================================== -->
+            <!-- CLAIM BUTTON -->
+            <!-- ====================================== -->
+
+            <form
+                method="POST"
+                action="{{ url_for(
+                    'claim_item',
+                    item_id=match.found.id
                 ) }}"
-                width="180"
             >
 
-        {% endif %}
+                <input
+                    type="hidden"
+                    name="csrf_token"
+                    value="{{ csrf_token() }}"
+                >
+
+                <button type="submit">
+                    Claim This Item
+                </button>
+
+            </form>
 
 
-        <!-- FOUND ITEM -->
+            <!-- ====================================== -->
+            <!-- AI FACTORS -->
+            <!-- ====================================== -->
 
-        <h3>Found Item</h3>
+            <h3>AI Matching Factors</h3>
 
-        <p>
-            <strong>Item:</strong>
-            {{ match.found.title }}
-        </p>
+            <p>
+                Text Similarity:
+                {{ match.text }}%
+            </p>
 
-        <p>
-            <strong>Description:</strong>
-            {{ match.found.description }}
-        </p>
+            <p>
+                Image Similarity:
+                {{ match.image }}%
+            </p>
 
-        <p>
-            <strong>Category:</strong>
-            {{ match.found.category }}
-        </p>
+            <p>
+                Category Match:
+                {{ match.category }}%
+            </p>
 
-        <p>
-            <strong>Color:</strong>
-            {{ match.found.color }}
-        </p>
+            <p>
+                Color Match:
+                {{ match.color }}%
+            </p>
 
-        <p>
-            <strong>Location:</strong>
-            {{ match.found.location }}
-        </p>
+            <p>
+                Location Match:
+                {{ match.location }}%
+            </p>
 
-        <p>
-            <strong>Date:</strong>
-            {{ match.found.date }}
-        </p>
+            <p>
+                Date Match:
+                {{ match.date }}%
+            </p>
 
-        {% if match.found.image %}
-
-            <img
-                src="{{ url_for(
-                    'static',
-                    filename='uploads/' + match.found.image
-                ) }}"
-                width="180"
-            >
-
-        {% endif %}
-        <br>
-
-        <form
-            method="POST"
-            action="{{ url_for('claim_item', item_id=match.found.id) }}"
-        >
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-
-            <button type="submit">
-                Claim This Item
-            </button>
-        </form>
-
-
-        <!-- AI FACTORS -->
-
-        <h3>AI Matching Factors</h3>
-
-        <p>
-            Text Similarity:
-            {{ match.text }}%
-        </p>
-
-        <p>
-            Image Similarity:
-            {{ match.image }}%
-        </p>
-
-        <p>
-            Category Match:
-            {{ match.category }}%
-        </p>
-
-        <p>
-            Color Match:
-            {{ match.color }}%
-        </p>
-
-        <p>
-            Location Match:
-            {{ match.location }}%
-        </p>
-
-        <p>
-            Date Match:
-            {{ match.date }}%
-        </p>
+        </div>
 
     {% endfor %}
+
 
 {% else %}
 
@@ -189,10 +330,11 @@
 
 <br>
 
-<a href="/dashboard">
+<a href="{{ url_for('dashboard') }}">
     Back to Dashboard
 </a>
 
 </body>
 
 </html>
+```
