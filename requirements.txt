@@ -6,3 +6,7 @@ opencv-python-headless
 psycopg
 pywebpush
 Flask-WTF
+requests
+numpy
+python-dotenv
+cloudinary
