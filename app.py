@@ -2,13 +2,15 @@ import os
 import uuid
 import base64
 import json
+import cloudinary
+import cloudinary.uploader
 
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_wtf.csrf import CSRFProtect
 from pywebpush import webpush, WebPushException
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
-
+from datetime import datetime
 from models import (
     db,
     User,
@@ -19,7 +21,8 @@ from models import (
 )
 
 from ai.match_engine import calculate_match
-
+from dotenv import load_dotenv
+load_dotenv()
 
 app = Flask(__name__)
 csrf = CSRFProtect(app)
@@ -29,9 +32,15 @@ csrf = CSRFProtect(app)
 # CONFIGURATION
 # ============================================================
 
+# Cloudinary configuration
+cloudinary.config(
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET")
+)
+
 # Use Render PostgreSQL when DATABASE_URL is available.
 # Keep SQLite as a local fallback for development.
-
 database_url = os.getenv(
     "DATABASE_URL",
     "sqlite:///lost_found.db"
@@ -39,7 +48,6 @@ database_url = os.getenv(
 
 # Render may provide postgres://
 # SQLAlchemy expects postgresql://
-
 if database_url.startswith("postgres://"):
     database_url = database_url.replace(
         "postgres://",
@@ -116,10 +124,8 @@ def admin_required():
 def save_uploaded_image(image):
 
     """
-    Save uploaded image using a unique filename.
-
-    Prevents two users from accidentally overwriting
-    files with the same filename.
+    Upload image to Cloudinary and return
+    the permanent secure image URL.
     """
 
     if not image or not image.filename:
@@ -132,23 +138,23 @@ def save_uploaded_image(image):
     if not original_name:
         return None
 
-    extension = os.path.splitext(
-        original_name
-    )[1]
+    try:
 
-    unique_filename = (
-        f"{uuid.uuid4().hex}{extension}"
-    )
+        result = cloudinary.uploader.upload(
+            image,
+            folder="smart-lost-found"
+        )
 
-    file_path = os.path.join(
-        app.config['UPLOAD_FOLDER'],
-        unique_filename
-    )
+        return result.get("secure_url")
 
-    image.save(file_path)
+    except Exception as e:
 
-    return unique_filename
+        print(
+            "Cloudinary upload failed:",
+            e
+        )
 
+        return None
 
 # ============================================================
 # PUSH NOTIFICATION
@@ -539,6 +545,14 @@ def register():
 
         password = request.form['password']
 
+        # ----------------------------------------------------
+        # Validate Gmail address
+        # ----------------------------------------------------
+
+        if not email.endswith('@gmail.com'):
+
+            return "Please use a valid Gmail address ending with @gmail.com."
+
         # Check existing email
 
         existing_user = User.query.filter_by(
@@ -551,6 +565,7 @@ def register():
 
         # Every newly registered account is a normal User.
         hashed_password = generate_password_hash(password)
+
         user = User(
 
             name=name,
@@ -573,7 +588,6 @@ def register():
     return render_template(
         'register.html'
     )
-
 
 # ============================================================
 # ADMIN SETUP
@@ -599,6 +613,11 @@ def login():
         password = request.form['password']
 
         user = User.query.filter_by(email=email).first()
+        print("LOGIN EMAIL:", email)
+        print("USER FOUND:", user is not None)
+
+        if user:
+            print("USER ROLE:", user.role)
 
         if user and check_password_hash(user.password, password):
 
@@ -747,7 +766,7 @@ def report_lost():
 
             image=image_filename,
 
-            status='Active'
+            status='Pending Approval'
         )
 
         db.session.add(report)
@@ -790,7 +809,8 @@ def report_lost():
 
         'report_item.html',
 
-        report_type='Lost'
+        report_type='Lost',
+        today=datetime.now().strftime("%Y-%m-%d")
     )
 
 
@@ -856,7 +876,7 @@ def report_found():
 
             image=image_filename,
 
-            status='Active'
+            status='Pending Approval'
         )
 
         db.session.add(report)
@@ -969,7 +989,8 @@ def report_found():
 
         'report_item.html',
 
-        report_type='Found'
+        report_type='Found',
+        today=datetime.now().strftime("%Y-%m-%d")
     )
 
 
@@ -1001,6 +1022,7 @@ def my_reports():
         'my_reports.html',
 
         reports=reports
+        
     )
 
 
@@ -1061,12 +1083,12 @@ def matches():
 
     lost_items = ItemReport.query.filter_by(
         report_type='Lost',
-        status='Active'
+        status='Approved'
     ).all()
 
     found_items = ItemReport.query.filter_by(
         report_type='Found',
-        status='Active'
+        status='Approved'
     ).all()
 
     print("================================")
@@ -1132,6 +1154,131 @@ def matches():
     )
 
 # ============================================================
+# ADMIN - VIEW REPORTS
+# ============================================================
+
+@app.route('/admin/reports')
+def admin_reports():
+
+    if 'user_id' not in session:
+        return redirect(
+            url_for('login')
+        )
+
+    user = admin_required()
+
+    if not user:
+        return "Access Denied! Admins only.", 403
+
+    reports = ItemReport.query.order_by(
+        ItemReport.created_at.desc()
+    ).all()
+
+    return render_template(
+        'admin_reports.html',
+        reports=reports
+    )
+
+
+# ============================================================
+# ADMIN - APPROVE REPORT
+# ============================================================
+
+@app.route(
+    '/admin/reports/approve/<int:report_id>',
+    methods=['POST']
+)
+def approve_report(report_id):
+
+    if 'user_id' not in session:
+        return redirect(
+            url_for('login')
+        )
+
+    user = admin_required()
+
+    if not user:
+        return "Access Denied! Admins only.", 403
+
+    report = ItemReport.query.get_or_404(
+        report_id
+    )
+
+    if report.status != 'Pending Approval':
+        return "This report has already been processed."
+
+    report.status = 'Approved'
+
+    db.session.commit()
+
+    # Notify report owner
+    create_notification(
+        recipient_id=report.user_id,
+        title='Report Approved',
+        message=(
+            f'Your {report.report_type.lower()} report '
+            f'"{report.title}" has been approved.'
+        ),
+        notification_type='report_approved',
+        item_id=report.id
+    )
+
+    db.session.commit()
+
+    return redirect(
+        url_for('admin_reports')
+    )
+
+
+# ============================================================
+# ADMIN - REJECT REPORT
+# ============================================================
+
+@app.route(
+    '/admin/reports/reject/<int:report_id>',
+    methods=['POST']
+)
+def reject_report(report_id):
+
+    if 'user_id' not in session:
+        return redirect(
+            url_for('login')
+        )
+
+    user = admin_required()
+
+    if not user:
+        return "Access Denied! Admins only.", 403
+
+    report = ItemReport.query.get_or_404(
+        report_id
+    )
+
+    if report.status != 'Pending Approval':
+        return "This report has already been processed."
+
+    report.status = 'Rejected'
+
+    db.session.commit()
+
+    # Notify report owner
+    create_notification(
+        recipient_id=report.user_id,
+        title='Report Rejected',
+        message=(
+            f'Your {report.report_type.lower()} report '
+            f'"{report.title}" has been rejected by the administrator.'
+        ),
+        notification_type='report_rejected',
+        item_id=report.id
+    )
+
+    db.session.commit()
+
+    return redirect(
+        url_for('admin_reports')
+    )
+# ============================================================
 # CLAIM ITEM
 # ============================================================
 
@@ -1156,7 +1303,7 @@ def claim_item(item_id):
 
     # Don't allow claiming already claimed item
 
-    if item.status != 'Active':
+    if item.status != 'Approved':
 
         return "This item is no longer available for claiming."
 
