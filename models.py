@@ -101,6 +101,8 @@ class ItemReport(db.Model):
         db.String(30),
         default='Active'
     )
+    # AI-generated report explanation
+    ai_analysis = db.Column(db.Text, nullable=True)
 
     created_at = db.Column(
         db.DateTime,

@@ -4,6 +4,7 @@
 
 <head>
     <title>My Reports</title>
+    
 
     <style>
         body {
@@ -30,6 +31,23 @@
 
         hr {
             margin: 25px 0;
+        }
+        .ai-analysis {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f0f7ff;
+            border-left: 4px solid #2563eb;
+            border-radius: 6px;
+        }
+
+        .ai-analysis h3 {
+            margin-top: 0;
+            color: #2563eb;
+        }
+
+        .ai-analysis p {
+            line-height: 1.6;
+            margin-bottom: 0;
         }
     </style>
 </head>
@@ -79,6 +97,14 @@
                 <strong>Status:</strong>
                 {{ report.status }}
             </p>
+            
+            <!-- AI ANALYSIS -->
+            {% if report.ai_analysis %}
+            <div class="ai-analysis">
+                <h3>🤖 AI Report Analysis</h3>
+                <p>{{ report.ai_analysis }}</p>
+            </div>
+            {% endif %}
 
 
             <!-- IMAGE -->

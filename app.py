@@ -4,7 +4,7 @@ import base64
 import json
 import cloudinary
 import cloudinary.uploader
-
+from ai.report_analyzer import analyze_report
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_wtf.csrf import CSRFProtect
 from pywebpush import webpush, WebPushException
@@ -660,6 +660,126 @@ def admin_claims():
         'admin_claims.html',
         claims=claims
     )
+# ============================================================
+# ADMIN - MANAGE USERS
+# ============================================================
+
+@app.route('/admin/users')
+def admin_users():
+
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    user = admin_required()
+
+    if not user:
+        return "Access Denied! Admins only.", 403
+
+    users = User.query.order_by(
+        User.id.asc()
+    ).all()
+
+    return render_template(
+        'admin_users.html',
+        users=users
+    )
+
+
+# ============================================================
+# ADMIN - DELETE USER
+# ============================================================
+
+@app.route(
+    '/admin/users/delete/<int:user_id>',
+    methods=['POST']
+)
+def delete_user(user_id):
+
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    admin = admin_required()
+
+    if not admin:
+        return "Access Denied! Admins only.", 403
+
+    # Prevent admin from deleting their own account
+    if user_id == session['user_id']:
+        return "You cannot delete your own admin account."
+
+    user = User.query.get_or_404(user_id)
+    if user.role == 'Admin':
+        return "Admin accounts cannot be deleted."
+    # --------------------------------------------------------
+    # Delete claims related to this user's reports
+    # --------------------------------------------------------
+
+    user_reports = ItemReport.query.filter_by(
+        user_id=user.id
+    ).all()
+
+    for report in user_reports:
+
+        Claim.query.filter_by(
+            item_id=report.id
+        ).delete(
+            synchronize_session=False
+        )
+
+        Notification.query.filter_by(
+            item_id=report.id
+        ).delete(
+            synchronize_session=False
+        )
+
+    # --------------------------------------------------------
+    # Delete claims made by this user
+    # --------------------------------------------------------
+
+    Claim.query.filter_by(
+        claimant_id=user.id
+    ).delete(
+        synchronize_session=False
+    )
+
+    # --------------------------------------------------------
+    # Delete notifications received by this user
+    # --------------------------------------------------------
+
+    Notification.query.filter_by(
+        recipient_id=user.id
+    ).delete(
+        synchronize_session=False
+    )
+
+    # --------------------------------------------------------
+    # Delete push subscriptions
+    # --------------------------------------------------------
+
+    PushSubscription.query.filter_by(
+        user_id=user.id
+    ).delete(
+        synchronize_session=False
+    )
+
+    # --------------------------------------------------------
+    # Delete user's reports
+    # --------------------------------------------------------
+
+    for report in user_reports:
+        db.session.delete(report)
+
+    # --------------------------------------------------------
+    # Finally delete the user
+    # --------------------------------------------------------
+
+    db.session.delete(user)
+
+    db.session.commit()
+
+    return redirect(
+        url_for('admin_users')
+    )
 
 
 # ============================================================
@@ -717,19 +837,79 @@ def report_lost():
             "LOST REPORT POST RECEIVED"
         )
 
-        title = request.form['title']
+        # ====================================================
+        # GET FORM DATA
+        # ====================================================
 
-        description = request.form['description']
+        title = request.form['title'].strip()
 
-        category = request.form['category']
+        description = request.form['description'].strip()
 
-        color = request.form['color']
+        category = request.form['category'].strip()
 
-        location = request.form['location']
+        color = request.form['color'].strip()
 
-        date = request.form['date']
+        location = request.form['location'].strip()
 
-        # Upload image
+        report_date = request.form['date'].strip()
+
+        # ====================================================
+        # DATE VALIDATION
+        # ====================================================
+
+        if not report_date:
+
+            return "Date is required."
+
+        try:
+
+            selected_date = datetime.strptime(
+                report_date,
+                "%Y-%m-%d"
+            ).date()
+
+            today_date = datetime.now().date()
+
+            if selected_date > today_date:
+
+                return "Future dates are not allowed."
+
+        except ValueError:
+
+            return "Invalid date."
+
+        # ====================================================
+        # AI REPORT ANALYSIS
+        # ====================================================
+
+        ai_analysis = analyze_report(
+
+            report_type="LOST",
+
+            title=title,
+
+            description=description,
+
+            category=category,
+
+            color=color,
+
+            location=location,
+
+            date=report_date
+        )
+
+        print(
+            "AI REPORT ANALYSIS:"
+        )
+
+        print(
+            ai_analysis["explanation"]
+        )
+
+        # ====================================================
+        # UPLOAD IMAGE
+        # ====================================================
 
         image = request.files.get(
             'image'
@@ -739,7 +919,9 @@ def report_lost():
             image
         )
 
-        # Create Lost report
+        # ====================================================
+        # CREATE LOST REPORT
+        # ====================================================
 
         report = ItemReport(
 
@@ -757,14 +939,17 @@ def report_lost():
 
             location=location,
 
-            date=date,
+            date=report_date,
 
             image=image_filename,
 
-            status='Pending Approval'
+            status='Pending Approval',
+            ai_analysis=ai_analysis["explanation"]
         )
 
-        db.session.add(report)
+        db.session.add(
+            report
+        )
 
         db.session.commit()
 
@@ -779,6 +964,7 @@ def report_lost():
             # Don't notify the person who created the report
 
             if user.id == session['user_id']:
+
                 continue
 
             create_notification(
@@ -787,7 +973,9 @@ def report_lost():
 
                 title='New Lost Item Reported',
 
-                message=f'{title} has been reported as lost.',
+                message=(
+                    f'{title} has been reported as lost.'
+                ),
 
                 notification_type='lost_report',
 
@@ -795,6 +983,10 @@ def report_lost():
             )
 
         db.session.commit()
+
+        # ====================================================
+        # REDIRECT
+        # ====================================================
 
         return redirect(
             url_for('my_reports')
@@ -805,7 +997,10 @@ def report_lost():
         'report_item.html',
 
         report_type='Lost',
-        today=datetime.now().strftime("%Y-%m-%d")
+
+        today=datetime.now().strftime(
+            "%Y-%m-%d"
+        )
     )
 
 
@@ -827,19 +1022,83 @@ def report_found():
 
     if request.method == 'POST':
 
-        title = request.form['title']
+        print(
+            "FOUND REPORT POST RECEIVED"
+        )
 
-        description = request.form['description']
+        # ====================================================
+        # GET FORM DATA
+        # ====================================================
 
-        category = request.form['category']
+        title = request.form['title'].strip()
 
-        color = request.form['color']
+        description = request.form['description'].strip()
 
-        location = request.form['location']
+        category = request.form['category'].strip()
 
-        date = request.form['date']
+        color = request.form['color'].strip()
 
-        # Upload image
+        location = request.form['location'].strip()
+
+        report_date = request.form['date'].strip()
+
+        # ====================================================
+        # DATE VALIDATION
+        # ====================================================
+
+        if not report_date:
+
+            return "Date is required."
+
+        try:
+
+            selected_date = datetime.strptime(
+                report_date,
+                "%Y-%m-%d"
+            ).date()
+
+            today_date = datetime.now().date()
+
+            if selected_date > today_date:
+
+                return "Future dates are not allowed."
+
+        except ValueError:
+
+            return "Invalid date."
+
+        # ====================================================
+        # AI REPORT ANALYSIS
+        # ====================================================
+
+        ai_analysis = analyze_report(
+
+            report_type="FOUND",
+
+            title=title,
+
+            description=description,
+
+            category=category,
+
+            color=color,
+
+            location=location,
+
+            date=report_date
+        )
+
+        print(
+            "AI REPORT ANALYSIS:"
+        )
+
+        print(
+            ai_analysis["explanation"]
+        )
+
+        # ====================================================
+        # UPLOAD IMAGE
+        # ====================================================
 
         image = request.files.get(
             'image'
@@ -849,7 +1108,9 @@ def report_found():
             image
         )
 
-        # Create Found report
+        # ====================================================
+        # CREATE FOUND REPORT
+        # ====================================================
 
         report = ItemReport(
 
@@ -867,82 +1128,22 @@ def report_found():
 
             location=location,
 
-            date=date,
+            date=report_date,
 
             image=image_filename,
 
-            status='Pending Approval'
+            status='Pending Approval',
+            ai_analysis=ai_analysis["explanation"]
         )
 
-        db.session.add(report)
+        db.session.add(
+            report
+        )
 
         db.session.commit()
 
         # ====================================================
-        # FIND BEST MATCHING LOST ITEM
-        # ====================================================
-
-        lost_reports = ItemReport.query.filter_by(
-
-            report_type='Lost',
-
-            status='Active'
-
-        ).all()
-
-        best_match = None
-
-        best_score = 0
-
-        for lost in lost_reports:
-
-            # Don't match the user's own report
-
-            if lost.user_id == session['user_id']:
-                continue
-
-            result = calculate_match(
-                lost,
-                report
-            )
-
-            score = result['final_score']
-
-            if score > best_score:
-
-                best_score = score
-
-                best_match = lost
-
-        # ====================================================
-        # NOTIFY MATCHING LOST USER
-        # ====================================================
-
-        if best_match and best_score >= 60:
-
-            create_notification(
-
-                recipient_id=best_match.user_id,
-
-                title='Possible Lost Item Match',
-
-                message=(
-
-                    f'A found item "{title}" may match your lost item '
-
-                    f'"{best_match.title}". '
-
-                    f'AI Match Score: {best_score}%'
-
-                ),
-
-                notification_type='match',
-
-                item_id=report.id
-            )
-
-        # ====================================================
-        # NOTIFY ADMIN
+        # NOTIFY ALL ADMINS
         # ====================================================
 
         admins = User.query.filter_by(
@@ -951,10 +1152,11 @@ def report_found():
 
         for admin in admins:
 
-            # Don't send duplicate notification if admin
-            # is the person who reported the found item
+            # Don't send duplicate notification
+            # if admin reported the found item
 
             if admin.id == session['user_id']:
+
                 continue
 
             create_notification(
@@ -964,9 +1166,8 @@ def report_found():
                 title='New Found Item Reported',
 
                 message=(
-
-                    f'{title} has been reported as found.'
-
+                    f'{title} has been reported as found '
+                    f'and is waiting for admin approval.'
                 ),
 
                 notification_type='found_report',
@@ -975,6 +1176,10 @@ def report_found():
             )
 
         db.session.commit()
+
+        # ====================================================
+        # REDIRECT
+        # ====================================================
 
         return redirect(
             url_for('my_reports')
@@ -985,7 +1190,10 @@ def report_found():
         'report_item.html',
 
         report_type='Found',
-        today=datetime.now().strftime("%Y-%m-%d")
+
+        today=datetime.now().strftime(
+            "%Y-%m-%d"
+        )
     )
 
 
@@ -1076,6 +1284,10 @@ def matches():
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
+    # --------------------------------------------------------
+    # GET APPROVED LOST AND FOUND REPORTS
+    # --------------------------------------------------------
+
     lost_items = ItemReport.query.filter_by(
         report_type='Lost',
         status='Approved'
@@ -1093,6 +1305,11 @@ def matches():
     print("================================")
 
     match_results = []
+    all_results = []
+
+    # --------------------------------------------------------
+    # COMPARE EVERY LOST ITEM WITH EVERY FOUND ITEM
+    # --------------------------------------------------------
 
     for lost in lost_items:
 
@@ -1110,6 +1327,10 @@ def matches():
                 found
             )
 
+            # ------------------------------------------------
+            # PRINT COMPLETE AI MATCH RESULT
+            # ------------------------------------------------
+
             print("TEXT:", result['text'])
             print("IMAGE:", result['image'])
             print("CATEGORY:", result['category'])
@@ -1118,36 +1339,79 @@ def matches():
             print("DATE:", result['date'])
             print("FINAL SCORE:", result['final_score'])
             print("LEVEL:", result['level'])
+
+            print("Lost image:", lost.image)
+            print("Found image:", found.image)
+
             print("--------------------------------")
+
+            match_data = {
+                'lost': lost,
+                'found': found,
+                'score': result['final_score'],
+                'level': result['level'],
+                'text': result['text'],
+                'image': result['image'],
+                'category': result['category'],
+                'color': result['color'],
+                'location': result['location'],
+                'date': result['date']
+            }
+
+            # Store every comparison for debugging
+            all_results.append(match_data)
+
+            # ------------------------------------------------
+            # ONLY 60%+ ARE NORMAL MATCHES
+            # ------------------------------------------------
 
             if result['final_score'] >= 60:
 
-                match_results.append({
-                    'lost': lost,
-                    'found': found,
-                    'score': result['final_score'],
-                    'level': result['level'],
-                    'text': result['text'],
-                    'image': result['image'],
-                    'category': result['category'],
-                    'color': result['color'],
-                    'location': result['location'],
-                    'date': result['date']
-                })
+                match_results.append(match_data)
+
+    # --------------------------------------------------------
+    # SORT NORMAL MATCHES
+    # --------------------------------------------------------
 
     match_results.sort(
         key=lambda x: x['score'],
         reverse=True
     )
 
+    # --------------------------------------------------------
+    # FIND BEST MATCH EVEN IF BELOW 60%
+    # --------------------------------------------------------
+
+    best_match = None
+
+    if all_results:
+
+        all_results.sort(
+            key=lambda x: x['score'],
+            reverse=True
+        )
+
+        best_match = all_results[0]
+
     print("TOTAL MATCHES:", len(match_results))
+
+    if best_match:
+        print(
+            "BEST MATCH:",
+            best_match['lost'].id,
+            "->",
+            best_match['found'].id,
+            "SCORE:",
+            best_match['score']
+        )
+
     print("================================")
 
     return render_template(
         'matches.html',
-        matches=match_results
+        matches=match_results,
+        best_match=best_match
     )
-
 # ============================================================
 # ADMIN - VIEW REPORTS
 # ============================================================

@@ -1,0 +1,17 @@
+.ai-analysis {
+    margin-top: 15px;
+    padding: 15px;
+    background: #f0f7ff;
+    border-left: 4px solid #2563eb;
+    border-radius: 6px;
+}
+
+.ai-analysis h3 {
+    margin-top: 0;
+    color: #2563eb;
+}
+
+.ai-analysis p {
+    line-height: 1.6;
+    margin-bottom: 0;
+}
