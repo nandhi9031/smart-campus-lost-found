@@ -1,177 +1,913 @@
-```html
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>My Reports</title>
-    
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Reports | Smart Campus Lost & Found</title>
 
     <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            margin: 30px;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #1f2937;
+            min-height: 100vh;
         }
 
-        .report {
-            margin-bottom: 25px;
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        .navbar {
+            background: #1e3a8a;
+            color: white;
+
+            padding: 16px 30px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
         }
 
-        .report-image {
-            max-width: 300px;
-            max-height: 300px;
-            height: auto;
-            display: block;
-            margin-top: 10px;
+        .brand {
+            font-size: 20px;
+            font-weight: bold;
         }
 
-        .image-link {
-            display: inline-block;
-            margin-top: 8px;
-        }
+        .back-btn {
+            color: white;
+            text-decoration: none;
 
-        hr {
-            margin: 25px 0;
-        }
-        .ai-analysis {
-            margin-top: 15px;
-            padding: 15px;
-            background: #f0f7ff;
-            border-left: 4px solid #2563eb;
+            border: 1px solid rgba(255,255,255,0.5);
+
+            padding: 8px 14px;
+
             border-radius: 6px;
+
+            font-size: 14px;
+        }
+
+        .back-btn:hover {
+            background: white;
+            color: #1e3a8a;
+        }
+
+
+        /* =========================
+           CONTAINER
+        ========================= */
+
+        .container {
+            max-width: 1100px;
+
+            margin: auto;
+
+            padding: 35px 20px 50px;
+        }
+
+
+        /* =========================
+           PAGE HEADER
+        ========================= */
+
+        .page-header {
+            background: white;
+
+            padding: 28px;
+
+            border-radius: 14px;
+
+            margin-bottom: 25px;
+
+            border: 1px solid #e5e7eb;
+
+            box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+
+            color: #111827;
+
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            color: #6b7280;
+
+            font-size: 15px;
+
+            line-height: 1.6;
+        }
+
+
+        /* =========================
+           REPORT CARD
+        ========================= */
+
+        .report-card {
+            background: white;
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 14px;
+
+            margin-bottom: 25px;
+
+            overflow: hidden;
+
+            box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+        }
+
+
+        /* =========================
+           REPORT HEADER
+        ========================= */
+
+        .report-header {
+            padding: 20px 25px;
+
+            border-bottom: 1px solid #e5e7eb;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+        }
+
+        .report-title {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+        }
+
+        .report-title h2 {
+            font-size: 20px;
+
+            color: #111827;
+        }
+
+        .report-type {
+            padding: 5px 10px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+
+            font-weight: bold;
+        }
+
+        .lost {
+            background: #fee2e2;
+
+            color: #b91c1c;
+        }
+
+        .found {
+            background: #dcfce7;
+
+            color: #15803d;
+        }
+
+
+        /* =========================
+           STATUS
+        ========================= */
+
+        .status {
+            padding: 6px 12px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+            white-space: nowrap;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+
+            color: #92400e;
+        }
+
+        .status-approved {
+            background: #dcfce7;
+
+            color: #166534;
+        }
+
+        .status-rejected {
+            background: #fee2e2;
+
+            color: #991b1b;
+        }
+
+        .status-claimed {
+            background: #dbeafe;
+
+            color: #1e40af;
+        }
+
+
+        /* =========================
+           REPORT BODY
+        ========================= */
+
+        .report-body {
+            padding: 25px;
+        }
+
+        .report-grid {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 18px;
+        }
+
+        .detail {
+            background: #f9fafb;
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 8px;
+
+            padding: 14px;
+        }
+
+        .detail-label {
+            font-size: 12px;
+
+            color: #6b7280;
+
+            margin-bottom: 5px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.4px;
+        }
+
+        .detail-value {
+            color: #111827;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            line-height: 1.5;
+        }
+
+
+        /* =========================
+           DESCRIPTION
+        ========================= */
+
+        .description-box {
+            margin-top: 18px;
+
+            padding: 16px;
+
+            background: #f9fafb;
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 8px;
+        }
+
+        .description-box h3 {
+            font-size: 14px;
+
+            margin-bottom: 8px;
+
+            color: #374151;
+        }
+
+        .description-box p {
+            color: #4b5563;
+
+            font-size: 14px;
+
+            line-height: 1.6;
+        }
+
+
+        /* =========================
+           AI ANALYSIS
+        ========================= */
+
+        .ai-analysis {
+
+            margin-top: 20px;
+
+            padding: 18px;
+
+            background: #eff6ff;
+
+            border: 1px solid #bfdbfe;
+
+            border-left: 5px solid #2563eb;
+
+            border-radius: 10px;
         }
 
         .ai-analysis h3 {
-            margin-top: 0;
-            color: #2563eb;
+
+            color: #1e40af;
+
+            font-size: 16px;
+
+            margin-bottom: 8px;
         }
 
         .ai-analysis p {
-            line-height: 1.6;
-            margin-bottom: 0;
+
+            color: #374151;
+
+            font-size: 14px;
+
+            line-height: 1.7;
         }
+
+
+        /* =========================
+           IMAGE SECTION
+        ========================= */
+
+        .image-section {
+
+            margin-top: 20px;
+
+            padding-top: 20px;
+
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .image-section h3 {
+
+            font-size: 15px;
+
+            color: #374151;
+
+            margin-bottom: 12px;
+        }
+
+        .report-image {
+
+            max-width: 350px;
+
+            max-height: 350px;
+
+            width: auto;
+
+            height: auto;
+
+            display: block;
+
+            border-radius: 10px;
+
+            border: 1px solid #d1d5db;
+
+            background: #f9fafb;
+        }
+
+        .image-link {
+
+            display: inline-block;
+
+            margin-top: 10px;
+
+            color: #2563eb;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+            font-weight: bold;
+        }
+
+        .image-link:hover {
+            text-decoration: underline;
+        }
+
+
+        /* =========================
+           NO REPORTS
+        ========================= */
+
+        .empty-state {
+
+            background: white;
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 14px;
+
+            padding: 50px 25px;
+
+            text-align: center;
+
+            box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+        }
+
+        .empty-icon {
+            font-size: 50px;
+
+            margin-bottom: 15px;
+        }
+
+        .empty-state h2 {
+            color: #111827;
+
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            color: #6b7280;
+
+            margin-bottom: 20px;
+        }
+
+        .report-btn {
+
+            display: inline-block;
+
+            background: #2563eb;
+
+            color: white;
+
+            padding: 11px 18px;
+
+            border-radius: 7px;
+
+            text-decoration: none;
+
+            font-weight: bold;
+
+            font-size: 14px;
+        }
+
+        .report-btn:hover {
+            background: #1d4ed8;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        .footer {
+
+            text-align: center;
+
+            margin-top: 40px;
+
+            color: #9ca3af;
+
+            font-size: 13px;
+
+            line-height: 1.6;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 768px) {
+
+            .navbar {
+                padding: 14px 18px;
+            }
+
+            .brand {
+                font-size: 16px;
+            }
+
+            .back-btn {
+                padding: 6px 10px;
+
+                font-size: 12px;
+            }
+
+            .container {
+                padding: 20px 15px 40px;
+            }
+
+            .page-header {
+                padding: 22px;
+            }
+
+            .page-header h1 {
+                font-size: 24px;
+            }
+
+            .report-header {
+                align-items: flex-start;
+
+                flex-direction: column;
+
+                padding: 18px;
+            }
+
+            .report-body {
+                padding: 18px;
+            }
+
+            .report-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .report-image {
+                max-width: 100%;
+
+                max-height: 300px;
+            }
+
+        }
+
+
+        @media (max-width: 400px) {
+
+            .brand {
+                font-size: 14px;
+            }
+
+            .page-header h1 {
+                font-size: 22px;
+            }
+
+            .report-title h2 {
+                font-size: 18px;
+            }
+
+        }
+
     </style>
+
 </head>
+
 
 <body>
 
-<h2>My Lost and Found Reports</h2>
 
-{% if reports %}
+<!-- =========================
+     NAVBAR
+========================= -->
 
-    {% for report in reports %}
+<nav class="navbar">
 
-        <div class="report">
+    <div class="brand">
+        🎓 Smart Campus Lost & Found
+    </div>
 
-            <hr>
+    <a
+        href="/dashboard"
+        class="back-btn"
+    >
+        ← Dashboard
+    </a>
 
-            <h3>
-                {{ report.report_type }}: {{ report.title }}
-            </h3>
-
-            <p>
-                <strong>Description:</strong>
-                {{ report.description }}
-            </p>
-
-            <p>
-                <strong>Category:</strong>
-                {{ report.category }}
-            </p>
-
-            <p>
-                <strong>Color:</strong>
-                {{ report.color }}
-            </p>
-
-            <p>
-                <strong>Location:</strong>
-                {{ report.location }}
-            </p>
-
-            <p>
-                <strong>Date:</strong>
-                {{ report.date }}
-            </p>
-
-            <p>
-                <strong>Status:</strong>
-                {{ report.status }}
-            </p>
-            
-            <!-- AI ANALYSIS -->
-            {% if report.ai_analysis %}
-            <div class="ai-analysis">
-                <h3>🤖 AI Report Analysis</h3>
-                <p>{{ report.ai_analysis }}</p>
-            </div>
-            {% endif %}
+</nav>
 
 
-            <!-- IMAGE -->
+<!-- =========================
+     MAIN
+========================= -->
 
-            {% if report.image %}
+<div class="container">
 
-                {% if report.image.startswith('http') %}
 
-                    <!-- Cloudinary image -->
+    <!-- PAGE HEADER -->
 
-                    <img
-                        src="{{ report.image }}"
-                        alt="{{ report.title }}"
-                        class="report-image"
-                    >
+    <div class="page-header">
 
-                    <a
-                        href="{{ report.image }}"
-                        target="_blank"
-                        class="image-link"
-                    >
-                        Open Image
-                    </a>
+        <h1>
+            📋 My Reports
+        </h1>
+
+        <p>
+            View the Lost and Found reports you have
+            submitted and check their current status,
+            AI analysis and uploaded images.
+        </p>
+
+    </div>
+
+
+    {% if reports %}
+
+
+        <!-- =========================
+             REPORTS
+        ========================= -->
+
+        {% for report in reports %}
+
+        <div class="report-card">
+
+
+            <!-- REPORT HEADER -->
+
+            <div class="report-header">
+
+                <div class="report-title">
+
+                    {% if report.report_type == 'Lost' %}
+
+                        <span class="report-type lost">
+                            LOST
+                        </span>
+
+                    {% else %}
+
+                        <span class="report-type found">
+                            FOUND
+                        </span>
+
+                    {% endif %}
+
+                    <h2>
+                        {{ report.title }}
+                    </h2>
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                {% if report.status == 'Pending Approval' %}
+
+                    <span class="status status-pending">
+                        ⏳ Pending Approval
+                    </span>
+
+                {% elif report.status == 'Approved' %}
+
+                    <span class="status status-approved">
+                        ✓ Approved
+                    </span>
+
+                {% elif report.status == 'Rejected' %}
+
+                    <span class="status status-rejected">
+                        ✕ Rejected
+                    </span>
+
+                {% elif report.status == 'Claimed' %}
+
+                    <span class="status status-claimed">
+                        ✓ Claimed
+                    </span>
 
                 {% else %}
 
-                    <!-- Old local image -->
-
-                    <img
-                        src="{{ url_for(
-                            'static',
-                            filename='uploads/' + report.image
-                        ) }}"
-                        alt="{{ report.title }}"
-                        class="report-image"
-                    >
-
-                    <a
-                        href="{{ url_for(
-                            'static',
-                            filename='uploads/' + report.image
-                        ) }}"
-                        target="_blank"
-                        class="image-link"
-                    >
-                        Open Image
-                    </a>
+                    <span class="status">
+                        {{ report.status }}
+                    </span>
 
                 {% endif %}
 
-            {% endif %}
+            </div>
+
+
+            <!-- REPORT BODY -->
+
+            <div class="report-body">
+
+
+                <!-- DETAILS -->
+
+                <div class="report-grid">
+
+
+                    <div class="detail">
+
+                        <div class="detail-label">
+                            Category
+                        </div>
+
+                        <div class="detail-value">
+                            {{ report.category or 'Not specified' }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="detail">
+
+                        <div class="detail-label">
+                            Color
+                        </div>
+
+                        <div class="detail-value">
+                            {{ report.color or 'Not specified' }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="detail">
+
+                        <div class="detail-label">
+                            Location
+                        </div>
+
+                        <div class="detail-value">
+                            📍 {{ report.location }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="detail">
+
+                        <div class="detail-label">
+                            Date
+                        </div>
+
+                        <div class="detail-value">
+                            📅 {{ report.date }}
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="description-box">
+
+                    <h3>
+                        Description
+                    </h3>
+
+                    <p>
+                        {{ report.description }}
+                    </p>
+
+                </div>
+
+
+                <!-- AI ANALYSIS -->
+
+                {% if report.ai_analysis %}
+
+                <div class="ai-analysis">
+
+                    <h3>
+                        🤖 AI Report Analysis
+                    </h3>
+
+                    <p>
+                        {{ report.ai_analysis }}
+                    </p>
+
+                </div>
+
+                {% endif %}
+
+
+                <!-- IMAGE -->
+
+                {% if report.image %}
+
+                <div class="image-section">
+
+                    <h3>
+                        🖼️ Uploaded Image
+                    </h3>
+
+
+                    {% if report.image.startswith('http') %}
+
+                        <!-- Cloudinary image -->
+
+                        <img
+                            src="{{ report.image }}"
+                            alt="{{ report.title }}"
+                            class="report-image"
+                        >
+
+                        <a
+                            href="{{ report.image }}"
+                            target="_blank"
+                            class="image-link"
+                        >
+                            Open Full Image ↗
+                        </a>
+
+
+                    {% else %}
+
+                        <!-- Old local image -->
+
+                        <img
+                            src="{{ url_for(
+                                'static',
+                                filename='uploads/' + report.image
+                            ) }}"
+                            alt="{{ report.title }}"
+                            class="report-image"
+                        >
+
+                        <a
+                            href="{{ url_for(
+                                'static',
+                                filename='uploads/' + report.image
+                            ) }}"
+                            target="_blank"
+                            class="image-link"
+                        >
+                            Open Full Image ↗
+                        </a>
+
+                    {% endif %}
+
+                </div>
+
+                {% endif %}
+
+
+            </div>
 
         </div>
 
-    {% endfor %}
+        {% endfor %}
 
-{% else %}
 
-    <p>You have not submitted any reports yet.</p>
+    {% else %}
 
-{% endif %}
 
-<br>
+        <!-- =========================
+             EMPTY STATE
+        ========================= -->
 
-<a href="/dashboard">Back to Dashboard</a>
+        <div class="empty-state">
+
+            <div class="empty-icon">
+                📭
+            </div>
+
+            <h2>
+                No Reports Yet
+            </h2>
+
+            <p>
+                You have not submitted any Lost or Found
+                reports yet.
+            </p>
+
+            <a
+                href="/report/lost"
+                class="report-btn"
+            >
+                Report an Item
+            </a>
+
+        </div>
+
+
+    {% endif %}
+
+
+    <!-- FOOTER -->
+
+    <div class="footer">
+
+        Smart Campus Lost & Found System
+        <br>
+
+        AI-powered item matching for campus communities
+
+    </div>
+
+
+</div>
+
 
 </body>
 
 </html>
-```
