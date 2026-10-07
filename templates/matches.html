@@ -1,124 +1,651 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
 
-    <title>AI Possible Matches</title>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        AI Matches | Smart Campus Lost & Found
+    </title>
 
     <style>
 
-        body {
-            font-family: Arial, sans-serif;
-            margin: 30px;
-            background: #f7f9fc;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #1f2937;
+            min-height: 100vh;
+        }
+
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        .navbar {
+            background: #1e3a8a;
+            color: white;
+
+            padding: 16px 30px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+        }
+
+        .brand {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .back-btn {
+            color: white;
+            text-decoration: none;
+
+            border: 1px solid rgba(255,255,255,0.5);
+
+            padding: 8px 14px;
+
+            border-radius: 6px;
+
+            font-size: 14px;
+        }
+
+        .back-btn:hover {
+            background: white;
+            color: #1e3a8a;
+        }
+
+
+        /* =========================
+           MAIN CONTAINER
+        ========================= */
 
         .container {
-            max-width: 1000px;
+            max-width: 1100px;
+
             margin: auto;
+
+            padding: 35px 20px 50px;
         }
 
-        .match,
-        .best-match {
+
+        /* =========================
+           PAGE HEADER
+        ========================= */
+
+        .page-header {
             background: white;
-            padding: 20px;
-            margin-bottom: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+
+            padding: 28px;
+
+            border-radius: 14px;
+
+            margin-bottom: 25px;
+
+            border: 1px solid #e5e7eb;
+
+            box-shadow: 0 3px 12px rgba(0,0,0,0.06);
         }
 
-        .best-match {
-            border-left: 6px solid #2563eb;
+        .page-header h1 {
+            font-size: 28px;
+
+            color: #111827;
+
+            margin-bottom: 10px;
         }
 
-        .match-title {
-            color: #2563eb;
+        .page-header p {
+            color: #6b7280;
+
+            line-height: 1.7;
+
+            font-size: 15px;
         }
 
-        .score {
-            font-size: 22px;
-            font-weight: bold;
-        }
+        .ai-badge {
+            display: inline-block;
 
-        .best-score {
-            font-size: 26px;
-            font-weight: bold;
-        }
-
-        .item-section {
-            background: #f8fafc;
-            padding: 15px;
             margin-top: 15px;
-            border-radius: 8px;
+
+            padding: 7px 12px;
+
+            border-radius: 20px;
+
+            background: #eff6ff;
+
+            color: #1d4ed8;
+
+            border: 1px solid #bfdbfe;
+
+            font-size: 13px;
+
+            font-weight: bold;
         }
 
-        .ai-factors {
-            background: #f0f7ff;
-            padding: 15px;
-            margin-top: 20px;
-            border-radius: 8px;
+
+        /* =========================
+           SECTION TITLE
+        ========================= */
+
+        .section-title {
+            margin: 30px 0 15px;
+
+            color: #111827;
+
+            font-size: 22px;
         }
 
-        .ai-factors h3 {
-            color: #2563eb;
+        .section-description {
+            color: #6b7280;
+
+            margin-bottom: 20px;
+
+            font-size: 14px;
         }
 
-        .factor {
-            margin: 8px 0;
+
+        /* =========================
+           MATCH CARD
+        ========================= */
+
+        .match-card {
+            background: white;
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 14px;
+
+            margin-bottom: 25px;
+
+            overflow: hidden;
+
+            box-shadow: 0 3px 12px rgba(0,0,0,0.06);
         }
+
+
+        /* =========================
+           MATCH HEADER
+        ========================= */
+
+        .match-header {
+            padding: 20px 25px;
+
+            border-bottom: 1px solid #e5e7eb;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 15px;
+        }
+
+        .match-level {
+            font-size: 19px;
+
+            color: #111827;
+
+            font-weight: bold;
+        }
+
+        .score-badge {
+            background: #2563eb;
+
+            color: white;
+
+            padding: 9px 15px;
+
+            border-radius: 20px;
+
+            font-size: 15px;
+
+            font-weight: bold;
+
+            white-space: nowrap;
+        }
+
+
+        /* =========================
+           ITEMS COMPARISON
+        ========================= */
+
+        .items-grid {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 20px;
+
+            padding: 25px;
+        }
+
+        .item-card {
+            background: #f9fafb;
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 10px;
+
+            padding: 20px;
+        }
+
+        .lost-item {
+            border-top: 4px solid #dc2626;
+        }
+
+        .found-item {
+            border-top: 4px solid #16a34a;
+        }
+
+        .item-card h3 {
+            margin-bottom: 15px;
+
+            font-size: 17px;
+        }
+
+        .lost-item h3 {
+            color: #b91c1c;
+        }
+
+        .found-item h3 {
+            color: #15803d;
+        }
+
+        .item-detail {
+            margin-bottom: 9px;
+
+            font-size: 14px;
+
+            line-height: 1.5;
+        }
+
+        .item-detail strong {
+            color: #374151;
+        }
+
+
+        /* =========================
+           IMAGE
+        ========================= */
 
         .item-image {
-            max-width: 300px;
-            max-height: 300px;
+            max-width: 100%;
+
+            max-height: 260px;
+
+            width: auto;
+
             height: auto;
+
             display: block;
-            margin-top: 10px;
-            border-radius: 8px;
+
+            margin-top: 15px;
+
+            border-radius: 9px;
+
+            border: 1px solid #d1d5db;
+
+            background: white;
         }
 
         .image-link {
             display: inline-block;
-            margin-top: 8px;
+
+            margin-top: 9px;
+
+            color: #2563eb;
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+            text-decoration: none;
+        }
+
+        .image-link:hover {
+            text-decoration: underline;
+        }
+
+        .no-image {
+            margin-top: 15px;
+
+            padding: 15px;
+
+            text-align: center;
+
+            background: #f3f4f6;
+
+            border-radius: 8px;
+
+            color: #6b7280;
+
+            font-size: 13px;
+        }
+
+
+        /* =========================
+           AI FACTORS
+        ========================= */
+
+        .ai-factors {
+            margin: 0 25px 25px;
+
+            background: #eff6ff;
+
+            border: 1px solid #bfdbfe;
+
+            border-radius: 12px;
+
+            padding: 20px;
+        }
+
+        .ai-factors h3 {
+            color: #1e40af;
+
+            margin-bottom: 18px;
+
+            font-size: 17px;
+        }
+
+        .factor-grid {
+            display: grid;
+
+            grid-template-columns: repeat(3, 1fr);
+
+            gap: 12px;
+        }
+
+        .factor {
+            background: white;
+
+            border: 1px solid #dbeafe;
+
+            border-radius: 8px;
+
+            padding: 13px;
+        }
+
+        .factor-name {
+            color: #6b7280;
+
+            font-size: 12px;
+
+            margin-bottom: 5px;
+        }
+
+        .factor-value {
+            color: #111827;
+
+            font-size: 16px;
+
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           CLAIM
+        ========================= */
+
+        .claim-section {
+            padding: 0 25px 25px;
+        }
+
+        .claim-note {
+            color: #6b7280;
+
+            font-size: 13px;
+
+            margin-bottom: 12px;
         }
 
         .claim-button {
             background: #2563eb;
+
             color: white;
+
             border: none;
-            padding: 10px 18px;
-            border-radius: 6px;
+
+            padding: 11px 20px;
+
+            border-radius: 7px;
+
             cursor: pointer;
-            font-size: 15px;
+
+            font-size: 14px;
+
+            font-weight: bold;
         }
 
         .claim-button:hover {
             background: #1d4ed8;
         }
 
-        .warning {
-            background: #fff7ed;
-            border-left: 5px solid #f97316;
-            padding: 15px;
-            margin-bottom: 25px;
-            border-radius: 6px;
-        }
+
+        /* =========================
+           NO MATCH
+        ========================= */
 
         .no-match {
             background: white;
-            padding: 20px;
+
+            border: 1px solid #fed7aa;
+
+            border-left: 5px solid #f97316;
+
             border-radius: 10px;
-            border-left: 5px solid #dc2626;
+
+            padding: 22px;
+
+            margin-bottom: 25px;
         }
 
-        hr {
-            margin: 25px 0;
-            border: none;
-            border-top: 1px solid #ddd;
+        .no-match h3 {
+            color: #9a3412;
+
+            margin-bottom: 8px;
         }
 
-        .back-link {
-            display: inline-block;
-            margin-top: 20px;
+        .no-match p {
+            color: #6b7280;
+
+            font-size: 14px;
+
+            line-height: 1.6;
+        }
+
+
+        /* =========================
+           BEST CANDIDATE
+        ========================= */
+
+        .best-match {
+            background: white;
+
+            border: 2px solid #2563eb;
+
+            border-radius: 14px;
+
+            margin-top: 30px;
+
+            overflow: hidden;
+
+            box-shadow: 0 4px 16px rgba(37,99,235,0.10);
+        }
+
+        .best-header {
+            background: #eff6ff;
+
+            padding: 22px 25px;
+
+            border-bottom: 1px solid #bfdbfe;
+        }
+
+        .best-header h2 {
+            color: #1e40af;
+
+            margin-bottom: 8px;
+
+            font-size: 21px;
+        }
+
+        .best-header p {
+            color: #4b5563;
+
+            font-size: 14px;
+
+            line-height: 1.6;
+        }
+
+        .warning {
+            background: #fff7ed;
+
+            border-left: 4px solid #f97316;
+
+            padding: 14px;
+
+            margin: 20px 25px;
+
+            border-radius: 7px;
+
+            color: #7c2d12;
+
+            font-size: 13px;
+
+            line-height: 1.5;
+        }
+
+        .best-score {
+            margin: 0 25px 20px;
+
+            font-size: 28px;
+
+            font-weight: bold;
+
+            color: #2563eb;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        .footer {
+            text-align: center;
+
+            margin-top: 40px;
+
+            color: #9ca3af;
+
+            font-size: 13px;
+
+            line-height: 1.6;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 768px) {
+
+            .navbar {
+                padding: 14px 18px;
+            }
+
+            .brand {
+                font-size: 16px;
+            }
+
+            .back-btn {
+                padding: 6px 10px;
+
+                font-size: 12px;
+            }
+
+            .container {
+                padding: 20px 15px 40px;
+            }
+
+            .page-header {
+                padding: 22px;
+            }
+
+            .page-header h1 {
+                font-size: 24px;
+            }
+
+            .match-header {
+                align-items: flex-start;
+
+                flex-direction: column;
+
+                padding: 18px;
+            }
+
+            .items-grid {
+                grid-template-columns: 1fr;
+
+                padding: 18px;
+            }
+
+            .ai-factors {
+                margin: 0 18px 20px;
+
+                padding: 18px;
+            }
+
+            .factor-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .claim-section {
+                padding: 0 18px 20px;
+            }
+
+            .warning {
+                margin: 18px;
+            }
+
+            .best-score {
+                margin: 0 18px 18px;
+            }
+
+        }
+
+
+        @media (max-width: 450px) {
+
+            .brand {
+                font-size: 14px;
+            }
+
+            .page-header h1 {
+                font-size: 22px;
+            }
+
+            .factor-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .score-badge {
+                font-size: 13px;
+            }
+
         }
 
     </style>
@@ -128,86 +655,138 @@
 
 <body>
 
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<nav class="navbar">
+
+    <div class="brand">
+        🎓 Smart Campus Lost & Found
+    </div>
+
+    <a
+        href="{{ url_for('dashboard') }}"
+        class="back-btn"
+    >
+        ← Dashboard
+    </a>
+
+</nav>
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
 <div class="container">
 
-    <h2>🤖 AI-Powered Lost and Found Matching</h2>
 
-    <p>
-        The AI system compares
-        <strong>text, images, category, color, location and date</strong>
-        to identify possible Lost and Found item matches.
-    </p>
+    <!-- =========================
+         HEADER
+    ========================= -->
 
-    <hr>
+    <div class="page-header">
+
+        <h1>
+            🤖 AI-Powered Lost & Found Matching
+        </h1>
+
+        <p>
+            The AI system compares
+            <strong>text, images, category, color,
+            location and date</strong>
+            to identify possible Lost and Found item matches.
+        </p>
+
+        <span class="ai-badge">
+            🧠 Multi-factor AI Matching System
+        </span>
+
+    </div>
 
 
-    <!-- ================================================== -->
-    <!-- NORMAL MATCHES -->
-    <!-- ================================================== -->
+    <!-- =========================
+         NORMAL MATCHES
+    ========================= -->
 
     {% if matches %}
 
-        <h2>Possible Matches</h2>
+        <h2 class="section-title">
+            🔎 Possible Matches
+        </h2>
 
-        <p>
-            The following candidates have an AI match score of
-            <strong>60% or above</strong>.
+        <p class="section-description">
+            The following candidates have an AI match score
+            of <strong>60% or above</strong>.
         </p>
 
 
         {% for match in matches %}
 
-            <div class="match">
 
-                <h3 class="match-title">
+        <div class="match-card">
+
+
+            <!-- MATCH HEADER -->
+
+            <div class="match-header">
+
+                <div class="match-level">
                     {{ match.level }}
-                </h3>
+                </div>
 
-                <p class="score">
+                <div class="score-badge">
                     Match Score: {{ match.score }}%
-                </p>
+                </div>
+
+            </div>
 
 
-                <!-- ====================================== -->
-                <!-- LOST ITEM -->
-                <!-- ====================================== -->
+            <!-- ITEMS -->
 
-                <div class="item-section">
+            <div class="items-grid">
 
-                    <h3>🔴 Lost Item</h3>
 
-                    <p>
+                <!-- LOST -->
+
+                <div class="item-card lost-item">
+
+                    <h3>
+                        🔴 Lost Item
+                    </h3>
+
+                    <p class="item-detail">
                         <strong>Item:</strong>
                         {{ match.lost.title }}
                     </p>
 
-                    <p>
+                    <p class="item-detail">
                         <strong>Description:</strong>
                         {{ match.lost.description }}
                     </p>
 
-                    <p>
+                    <p class="item-detail">
                         <strong>Category:</strong>
-                        {{ match.lost.category }}
+                        {{ match.lost.category or 'Not specified' }}
                     </p>
 
-                    <p>
+                    <p class="item-detail">
                         <strong>Color:</strong>
-                        {{ match.lost.color }}
+                        {{ match.lost.color or 'Not specified' }}
                     </p>
 
-                    <p>
+                    <p class="item-detail">
                         <strong>Location:</strong>
-                        {{ match.lost.location }}
+                        📍 {{ match.lost.location }}
                     </p>
 
-                    <p>
+                    <p class="item-detail">
                         <strong>Date:</strong>
-                        {{ match.lost.date }}
+                        📅 {{ match.lost.date }}
                     </p>
 
-
-                    <!-- LOST IMAGE -->
 
                     {% if match.lost.image %}
 
@@ -224,7 +803,7 @@
                                 target="_blank"
                                 class="image-link"
                             >
-                                Open Lost Item Image
+                                Open Lost Item Image ↗
                             </a>
 
                         {% else %}
@@ -246,62 +825,60 @@
                                 target="_blank"
                                 class="image-link"
                             >
-                                Open Lost Item Image
+                                Open Lost Item Image ↗
                             </a>
 
                         {% endif %}
 
                     {% else %}
 
-                        <p>
-                            <strong>No image uploaded.</strong>
-                        </p>
+                        <div class="no-image">
+                            📷 No image uploaded
+                        </div>
 
                     {% endif %}
 
                 </div>
 
 
-                <!-- ====================================== -->
-                <!-- FOUND ITEM -->
-                <!-- ====================================== -->
+                <!-- FOUND -->
 
-                <div class="item-section">
+                <div class="item-card found-item">
 
-                    <h3>🟢 Found Item</h3>
+                    <h3>
+                        🟢 Found Item
+                    </h3>
 
-                    <p>
+                    <p class="item-detail">
                         <strong>Item:</strong>
                         {{ match.found.title }}
                     </p>
 
-                    <p>
+                    <p class="item-detail">
                         <strong>Description:</strong>
                         {{ match.found.description }}
                     </p>
 
-                    <p>
+                    <p class="item-detail">
                         <strong>Category:</strong>
-                        {{ match.found.category }}
+                        {{ match.found.category or 'Not specified' }}
                     </p>
 
-                    <p>
+                    <p class="item-detail">
                         <strong>Color:</strong>
-                        {{ match.found.color }}
+                        {{ match.found.color or 'Not specified' }}
                     </p>
 
-                    <p>
+                    <p class="item-detail">
                         <strong>Location:</strong>
-                        {{ match.found.location }}
+                        📍 {{ match.found.location }}
                     </p>
 
-                    <p>
+                    <p class="item-detail">
                         <strong>Date:</strong>
-                        {{ match.found.date }}
+                        📅 {{ match.found.date }}
                     </p>
 
-
-                    <!-- FOUND IMAGE -->
 
                     {% if match.found.image %}
 
@@ -318,7 +895,7 @@
                                 target="_blank"
                                 class="image-link"
                             >
-                                Open Found Item Image
+                                Open Found Item Image ↗
                             </a>
 
                         {% else %}
@@ -340,68 +917,101 @@
                                 target="_blank"
                                 class="image-link"
                             >
-                                Open Found Item Image
+                                Open Found Item Image ↗
                             </a>
 
                         {% endif %}
 
                     {% else %}
 
-                        <p>
-                            <strong>No image uploaded.</strong>
-                        </p>
+                        <div class="no-image">
+                            📷 No image uploaded
+                        </div>
 
                     {% endif %}
 
                 </div>
 
+            </div>
 
-                <!-- ====================================== -->
-                <!-- AI FACTORS -->
-                <!-- ====================================== -->
 
-                <div class="ai-factors">
+            <!-- AI FACTORS -->
 
-                    <h3>🧠 AI Matching Factors</h3>
+            <div class="ai-factors">
 
-                    <p class="factor">
-                        <strong>Text Similarity:</strong>
-                        {{ match.text }}%
-                    </p>
+                <h3>
+                    🧠 AI Matching Factors
+                </h3>
 
-                    <p class="factor">
-                        <strong>Image Similarity:</strong>
-                        {{ match.image }}%
-                    </p>
+                <div class="factor-grid">
 
-                    <p class="factor">
-                        <strong>Category Match:</strong>
-                        {{ match.category }}%
-                    </p>
+                    <div class="factor">
+                        <div class="factor-name">
+                            Text Similarity
+                        </div>
+                        <div class="factor-value">
+                            {{ match.text }}%
+                        </div>
+                    </div>
 
-                    <p class="factor">
-                        <strong>Color Match:</strong>
-                        {{ match.color }}%
-                    </p>
+                    <div class="factor">
+                        <div class="factor-name">
+                            Image Similarity
+                        </div>
+                        <div class="factor-value">
+                            {{ match.image }}%
+                        </div>
+                    </div>
 
-                    <p class="factor">
-                        <strong>Location Match:</strong>
-                        {{ match.location }}%
-                    </p>
+                    <div class="factor">
+                        <div class="factor-name">
+                            Category Match
+                        </div>
+                        <div class="factor-value">
+                            {{ match.category }}%
+                        </div>
+                    </div>
 
-                    <p class="factor">
-                        <strong>Date Match:</strong>
-                        {{ match.date }}%
-                    </p>
+                    <div class="factor">
+                        <div class="factor-name">
+                            Color Match
+                        </div>
+                        <div class="factor-value">
+                            {{ match.color }}%
+                        </div>
+                    </div>
+
+                    <div class="factor">
+                        <div class="factor-name">
+                            Location Match
+                        </div>
+                        <div class="factor-value">
+                            {{ match.location }}%
+                        </div>
+                    </div>
+
+                    <div class="factor">
+                        <div class="factor-name">
+                            Date Match
+                        </div>
+                        <div class="factor-value">
+                            {{ match.date }}%
+                        </div>
+                    </div>
 
                 </div>
 
+            </div>
 
-                <!-- ====================================== -->
-                <!-- CLAIM BUTTON -->
-                <!-- ====================================== -->
 
-                <br>
+            <!-- CLAIM -->
+
+            <div class="claim-section">
+
+                <p class="claim-note">
+                    If this Found item belongs to you,
+                    you can submit a claim for administrator review.
+                </p>
 
                 <form
                     method="POST"
@@ -428,100 +1038,125 @@
 
             </div>
 
+
+        </div>
+
+
         {% endfor %}
 
 
     {% else %}
 
-        <!-- ================================================== -->
-        <!-- NO 60%+ MATCH -->
-        <!-- ================================================== -->
+
+        <!-- =========================
+             NO STRONG MATCH
+        ========================= -->
 
         <div class="no-match">
 
-            <h3>⚠️ No Strong Matches Found</h3>
+            <h3>
+                ⚠️ No Strong Matches Found
+            </h3>
 
             <p>
                 The AI system did not find a candidate
-                with a score of <strong>60% or above</strong>.
+                with a score of
+                <strong>60% or above</strong>.
             </p>
 
         </div>
 
+
     {% endif %}
 
 
-    <!-- ================================================== -->
-    <!-- BEST MATCH BELOW 60% -->
-    <!-- ================================================== -->
+    <!-- =========================
+         BEST AVAILABLE CANDIDATE
+    ========================= -->
 
     {% if best_match %}
 
         {% if not matches or best_match.score < 60 %}
 
-            <div class="best-match">
 
-                <h2>🔎 Best Available AI Candidate</h2>
-
-                <div class="warning">
-
-                    <strong>Note:</strong>
-
-                    This candidate has a score below the
-                    60% strong-match threshold.
-
-                    It is shown only to help demonstrate
-                    the AI comparison results.
-
-                </div>
+        <div class="best-match">
 
 
-                <p class="best-score">
-                    AI Score: {{ best_match.score }}%
-                </p>
+            <div class="best-header">
+
+                <h2>
+                    🔎 Best Available AI Candidate
+                </h2>
 
                 <p>
-                    <strong>Match Level:</strong>
-                    {{ best_match.level }}
+                    This is the highest-scoring candidate
+                    found by the AI comparison system.
                 </p>
 
+            </div>
 
-                <!-- ====================================== -->
-                <!-- BEST LOST ITEM -->
-                <!-- ====================================== -->
 
-                <div class="item-section">
+            <div class="warning">
 
-                    <h3>🔴 Lost Item</h3>
+                <strong>⚠️ Note:</strong>
 
-                    <p>
+                This candidate has a score below the
+                <strong>60% strong-match threshold</strong>.
+                It is displayed as the best available
+                candidate for reference and AI result analysis.
+                It should not automatically be considered
+                a confirmed match.
+
+            </div>
+
+
+            <div class="best-score">
+
+                AI Score:
+                {{ best_match.score }}%
+
+            </div>
+
+
+            <div class="items-grid">
+
+
+                <!-- BEST LOST -->
+
+                <div class="item-card lost-item">
+
+                    <h3>
+                        🔴 Lost Item
+                    </h3>
+
+                    <p class="item-detail">
                         <strong>Item:</strong>
                         {{ best_match.lost.title }}
                     </p>
 
-                    <p>
+                    <p class="item-detail">
                         <strong>Description:</strong>
                         {{ best_match.lost.description }}
                     </p>
 
-                    <p>
+                    <p class="item-detail">
                         <strong>Category:</strong>
-                        {{ best_match.lost.category }}
+                        {{ best_match.lost.category or 'Not specified' }}
                     </p>
 
-                    <p>
+                    <p class="item-detail">
                         <strong>Color:</strong>
-                        {{ best_match.lost.color }}
+                        {{ best_match.lost.color or 'Not specified' }}
                     </p>
 
-                    <p>
+                    <p class="item-detail">
                         <strong>Location:</strong>
-                        {{ best_match.lost.location }}
+                        📍 {{ best_match.lost.location }}
                     </p>
 
-                    <p>
+                    <p class="item-detail">
                         <strong>Date:</strong>
-                        {{ best_match.lost.date }}
+                        📅 {{ best_match.lost.date }}
                     </p>
 
 
@@ -540,7 +1175,7 @@
                                 target="_blank"
                                 class="image-link"
                             >
-                                Open Lost Item Image
+                                Open Lost Item Image ↗
                             </a>
 
                         {% else %}
@@ -562,7 +1197,7 @@
                                 target="_blank"
                                 class="image-link"
                             >
-                                Open Lost Item Image
+                                Open Lost Item Image ↗
                             </a>
 
                         {% endif %}
@@ -572,42 +1207,42 @@
                 </div>
 
 
-                <!-- ====================================== -->
-                <!-- BEST FOUND ITEM -->
-                <!-- ====================================== -->
+                <!-- BEST FOUND -->
 
-                <div class="item-section">
+                <div class="item-card found-item">
 
-                    <h3>🟢 Found Item</h3>
+                    <h3>
+                        🟢 Found Item
+                    </h3>
 
-                    <p>
+                    <p class="item-detail">
                         <strong>Item:</strong>
                         {{ best_match.found.title }}
                     </p>
 
-                    <p>
+                    <p class="item-detail">
                         <strong>Description:</strong>
                         {{ best_match.found.description }}
                     </p>
 
-                    <p>
+                    <p class="item-detail">
                         <strong>Category:</strong>
-                        {{ best_match.found.category }}
+                        {{ best_match.found.category or 'Not specified' }}
                     </p>
 
-                    <p>
+                    <p class="item-detail">
                         <strong>Color:</strong>
-                        {{ best_match.found.color }}
+                        {{ best_match.found.color or 'Not specified' }}
                     </p>
 
-                    <p>
+                    <p class="item-detail">
                         <strong>Location:</strong>
-                        {{ best_match.found.location }}
+                        📍 {{ best_match.found.location }}
                     </p>
 
-                    <p>
+                    <p class="item-detail">
                         <strong>Date:</strong>
-                        {{ best_match.found.date }}
+                        📅 {{ best_match.found.date }}
                     </p>
 
 
@@ -626,7 +1261,7 @@
                                 target="_blank"
                                 class="image-link"
                             >
-                                Open Found Item Image
+                                Open Found Item Image ↗
                             </a>
 
                         {% else %}
@@ -648,7 +1283,7 @@
                                 target="_blank"
                                 class="image-link"
                             >
-                                Open Found Item Image
+                                Open Found Item Image ↗
                             </a>
 
                         {% endif %}
@@ -658,61 +1293,100 @@
                 </div>
 
 
-                <!-- ====================================== -->
-                <!-- BEST MATCH AI FACTORS -->
-                <!-- ====================================== -->
+            </div>
 
-                <div class="ai-factors">
 
-                    <h3>🧠 AI Matching Factors</h3>
+            <!-- BEST MATCH FACTORS -->
 
-                    <p class="factor">
-                        <strong>Text Similarity:</strong>
-                        {{ best_match.text }}%
-                    </p>
+            <div class="ai-factors">
 
-                    <p class="factor">
-                        <strong>Image Similarity:</strong>
-                        {{ best_match.image }}%
-                    </p>
+                <h3>
+                    🧠 AI Matching Factors
+                </h3>
 
-                    <p class="factor">
-                        <strong>Category Match:</strong>
-                        {{ best_match.category }}%
-                    </p>
+                <div class="factor-grid">
 
-                    <p class="factor">
-                        <strong>Color Match:</strong>
-                        {{ best_match.color }}%
-                    </p>
+                    <div class="factor">
+                        <div class="factor-name">
+                            Text Similarity
+                        </div>
+                        <div class="factor-value">
+                            {{ best_match.text }}%
+                        </div>
+                    </div>
 
-                    <p class="factor">
-                        <strong>Location Match:</strong>
-                        {{ best_match.location }}%
-                    </p>
+                    <div class="factor">
+                        <div class="factor-name">
+                            Image Similarity
+                        </div>
+                        <div class="factor-value">
+                            {{ best_match.image }}%
+                        </div>
+                    </div>
 
-                    <p class="factor">
-                        <strong>Date Match:</strong>
-                        {{ best_match.date }}%
-                    </p>
+                    <div class="factor">
+                        <div class="factor-name">
+                            Category Match
+                        </div>
+                        <div class="factor-value">
+                            {{ best_match.category }}%
+                        </div>
+                    </div>
+
+                    <div class="factor">
+                        <div class="factor-name">
+                            Color Match
+                        </div>
+                        <div class="factor-value">
+                            {{ best_match.color }}%
+                        </div>
+                    </div>
+
+                    <div class="factor">
+                        <div class="factor-name">
+                            Location Match
+                        </div>
+                        <div class="factor-value">
+                            {{ best_match.location }}%
+                        </div>
+                    </div>
+
+                    <div class="factor">
+                        <div class="factor-name">
+                            Date Match
+                        </div>
+                        <div class="factor-value">
+                            {{ best_match.date }}%
+                        </div>
+                    </div>
 
                 </div>
 
             </div>
+
+
+        </div>
+
 
         {% endif %}
 
     {% endif %}
 
 
-    <a
-        href="{{ url_for('dashboard') }}"
-        class="back-link"
-    >
-        ← Back to Dashboard
-    </a>
+    <!-- FOOTER -->
+
+    <div class="footer">
+
+        Smart Campus Lost & Found System
+        <br>
+
+        AI-powered item matching for campus communities
+
+    </div>
+
 
 </div>
+
 
 </body>
 
