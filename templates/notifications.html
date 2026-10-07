@@ -1,41 +1,556 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Notifications</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Notifications | Smart Campus Lost & Found
+    </title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #1f2937;
+            min-height: 100vh;
+        }
+
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        .navbar {
+            background: #1e3a8a;
+            color: white;
+
+            padding: 16px 30px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+        }
+
+        .brand {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .back-btn {
+            color: white;
+            text-decoration: none;
+
+            border: 1px solid rgba(255,255,255,0.5);
+
+            padding: 8px 14px;
+
+            border-radius: 6px;
+
+            font-size: 14px;
+        }
+
+        .back-btn:hover {
+            background: white;
+            color: #1e3a8a;
+        }
+
+
+        /* =========================
+           CONTAINER
+        ========================= */
+
+        .container {
+            max-width: 900px;
+
+            margin: auto;
+
+            padding: 35px 20px 50px;
+        }
+
+
+        /* =========================
+           PAGE HEADER
+        ========================= */
+
+        .page-header {
+            background: white;
+
+            padding: 28px;
+
+            border-radius: 14px;
+
+            margin-bottom: 25px;
+
+            border: 1px solid #e5e7eb;
+
+            box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+
+            color: #111827;
+
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            color: #6b7280;
+
+            font-size: 15px;
+
+            line-height: 1.6;
+        }
+
+
+        /* =========================
+           NOTIFICATION CARD
+        ========================= */
+
+        .notification {
+            background: white;
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 12px;
+
+            padding: 20px;
+
+            margin-bottom: 15px;
+
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+
+            transition: 0.2s ease;
+        }
+
+        .notification:hover {
+            transform: translateY(-2px);
+
+            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+        }
+
+
+        /* =========================
+           NOTIFICATION HEADER
+        ========================= */
+
+        .notification-header {
+            display: flex;
+
+            align-items: flex-start;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            margin-bottom: 10px;
+        }
+
+        .notification-title {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+        }
+
+        .notification-icon {
+            width: 38px;
+
+            height: 38px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background: #eff6ff;
+
+            font-size: 19px;
+
+            flex-shrink: 0;
+        }
+
+        .notification-title h2 {
+            font-size: 17px;
+
+            color: #111827;
+        }
+
+
+        /* =========================
+           TIME
+        ========================= */
+
+        .notification-time {
+            color: #9ca3af;
+
+            font-size: 12px;
+
+            white-space: nowrap;
+        }
+
+
+        /* =========================
+           MESSAGE
+        ========================= */
+
+        .notification-message {
+            color: #4b5563;
+
+            font-size: 14px;
+
+            line-height: 1.6;
+
+            padding-left: 48px;
+        }
+
+
+        /* =========================
+           TYPE COLORS
+        ========================= */
+
+        .notification.lost {
+            border-left: 4px solid #dc2626;
+        }
+
+        .notification.found {
+            border-left: 4px solid #16a34a;
+        }
+
+        .notification.approval {
+            border-left: 4px solid #2563eb;
+        }
+
+        .notification.claim {
+            border-left: 4px solid #f59e0b;
+        }
+
+
+        /* =========================
+           EMPTY STATE
+        ========================= */
+
+        .empty-state {
+            background: white;
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 14px;
+
+            padding: 55px 25px;
+
+            text-align: center;
+
+            box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+        }
+
+        .empty-icon {
+            font-size: 50px;
+
+            margin-bottom: 15px;
+        }
+
+        .empty-state h2 {
+            color: #111827;
+
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            color: #6b7280;
+
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        .footer {
+            text-align: center;
+
+            margin-top: 40px;
+
+            color: #9ca3af;
+
+            font-size: 13px;
+
+            line-height: 1.6;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 768px) {
+
+            .navbar {
+                padding: 14px 18px;
+            }
+
+            .brand {
+                font-size: 16px;
+            }
+
+            .back-btn {
+                padding: 6px 10px;
+
+                font-size: 12px;
+            }
+
+            .container {
+                padding: 20px 15px 40px;
+            }
+
+            .page-header {
+                padding: 22px;
+            }
+
+            .page-header h1 {
+                font-size: 24px;
+            }
+
+            .notification {
+                padding: 17px;
+            }
+
+            .notification-header {
+                flex-direction: column;
+
+                gap: 8px;
+            }
+
+            .notification-message {
+                padding-left: 0;
+            }
+
+            .notification-time {
+                padding-left: 48px;
+            }
+
+        }
+
+
+        @media (max-width: 400px) {
+
+            .brand {
+                font-size: 14px;
+            }
+
+            .page-header h1 {
+                font-size: 22px;
+            }
+
+            .notification-title h2 {
+                font-size: 15px;
+            }
+
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
-<h2>Notifications</h2>
 
-{% if notifications %}
+<!-- =========================
+     NAVBAR
+========================= -->
 
-    {% for notification in notifications %}
+<nav class="navbar">
 
-        <div style="border:1px solid #ccc; padding:10px; margin:10px 0;">
+    <div class="brand">
+        🎓 Smart Campus Lost & Found
+    </div>
 
-            <h3>{{ notification.title }}</h3>
+    <a
+        href="/dashboard"
+        class="back-btn"
+    >
+        ← Dashboard
+    </a>
 
-            <p>{{ notification.message }}</p>
+</nav>
 
-            <small>
-                {{ notification.created_at }}
-            </small>
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<div class="container">
+
+
+    <!-- PAGE HEADER -->
+
+    <div class="page-header">
+
+        <h1>
+            🔔 Notifications
+        </h1>
+
+        <p>
+            Stay updated about your Lost and Found reports,
+            AI matching activity, claims and system updates.
+        </p>
+
+    </div>
+
+
+    {% if notifications %}
+
+
+        <!-- =========================
+             NOTIFICATIONS
+        ========================= -->
+
+        {% for notification in notifications %}
+
+            {% set notification_type =
+                notification.notification_type|default('')|lower
+            %}
+
+
+            <div
+                class="notification
+                {% if 'lost' in notification_type %}
+                    lost
+                {% elif 'found' in notification_type %}
+                    found
+                {% elif 'claim' in notification_type %}
+                    claim
+                {% elif 'approval' in notification_type %}
+                    approval
+                {% endif %}"
+            >
+
+
+                <div class="notification-header">
+
+
+                    <div class="notification-title">
+
+                        <div class="notification-icon">
+
+                            {% if 'lost' in notification_type %}
+
+                                🔴
+
+                            {% elif 'found' in notification_type %}
+
+                                🟢
+
+                            {% elif 'claim' in notification_type %}
+
+                                🧾
+
+                            {% elif 'approval' in notification_type %}
+
+                                ✅
+
+                            {% else %}
+
+                                🔔
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <h2>
+                            {{ notification.title }}
+                        </h2>
+
+                    </div>
+
+
+                    <span class="notification-time">
+
+                        {{ notification.created_at }}
+
+                    </span>
+
+
+                </div>
+
+
+                <p class="notification-message">
+
+                    {{ notification.message }}
+
+                </p>
+
+
+            </div>
+
+        {% endfor %}
+
+
+    {% else %}
+
+
+        <!-- =========================
+             EMPTY STATE
+        ========================= -->
+
+        <div class="empty-state">
+
+            <div class="empty-icon">
+                🔕
+            </div>
+
+            <h2>
+                No Notifications
+            </h2>
+
+            <p>
+                You don't have any notifications at the moment.
+                New updates will appear here.
+            </p>
 
         </div>
 
-    {% endfor %}
 
-{% else %}
+    {% endif %}
 
-    <p>No notifications found.</p>
 
-{% endif %}
+    <!-- =========================
+         FOOTER
+    ========================= -->
 
-<br>
+    <div class="footer">
 
-<a href="/dashboard">Back to Dashboard</a>
+        Smart Campus Lost & Found System
+        <br>
+
+        AI-powered item matching for campus communities
+
+    </div>
+
+
+</div>
+
 
 </body>
 
