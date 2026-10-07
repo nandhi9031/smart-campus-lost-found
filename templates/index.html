@@ -1,25 +1,1758 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Smart Campus Lost and Found</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Smart Campus Lost & Found | PKIET
+    </title>
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            font-family:
+                "Segoe UI",
+                Arial,
+                sans-serif;
+
+            min-height: 100vh;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #eaf5fb,
+                    #f7fbfd
+                );
+
+            color: #1f2937;
+        }
+
+
+        /* =========================================
+           MAIN CONTAINER
+        ========================================= */
+
+        .page-container {
+
+            width: 100%;
+
+            max-width: 1200px;
+
+            min-height: 100vh;
+
+            margin: auto;
+
+            background: white;
+
+            box-shadow:
+                0 0 50px
+                rgba(0, 0, 0, 0.08);
+        }
+
+
+        /* =========================================
+           INSTITUTION HEADER
+        ========================================= */
+
+        .institution-header {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 25px;
+
+            padding: 18px 35px;
+
+            background: white;
+
+            border-bottom:
+                1px solid #e2e8f0;
+        }
+
+
+        .pkiet-logo,
+        .ptu-logo {
+
+            flex-shrink: 0;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+        }
+
+
+        .pkiet-logo img {
+
+            width: 78px;
+
+            height: 105px;
+
+            object-fit: contain;
+        }
+
+
+        .ptu-logo img {
+
+            width: 72px;
+
+            height: 98px;
+
+            object-fit: contain;
+        }
+
+
+        .institution-text {
+
+            flex: 1;
+
+            text-align: center;
+        }
+
+
+        .institution-text h2 {
+
+            font-family:
+                Georgia,
+                "Times New Roman",
+                serif;
+
+            font-size: 20px;
+
+            color: #111827;
+
+            line-height: 1.4;
+        }
+
+
+        .institution-text h3 {
+
+            font-family:
+                Georgia,
+                "Times New Roman",
+                serif;
+
+            font-size: 18px;
+
+            color: #111827;
+
+            line-height: 1.5;
+        }
+
+
+        .institution-text p {
+
+            font-family:
+                Georgia,
+                "Times New Roman",
+                serif;
+
+            font-size: 13px;
+
+            color: #374151;
+
+            line-height: 1.5;
+
+            margin-top: 2px;
+        }
+
+
+        /* =========================================
+           NAVBAR
+        ========================================= */
+
+        .navbar {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 17px 55px;
+
+            background: #064e7a;
+        }
+
+
+        .brand {
+
+            color: white;
+
+            font-size: 18px;
+
+            font-weight: 800;
+
+            text-decoration: none;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+        }
+
+
+        .brand-icon {
+
+            width: 34px;
+
+            height: 34px;
+
+            border-radius: 10px;
+
+            background:
+                rgba(255,255,255,0.13);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 18px;
+        }
+
+
+        .nav-links {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+        }
+
+
+        .nav-link {
+
+            color: white;
+
+            text-decoration: none;
+
+            padding: 9px 17px;
+
+            border-radius: 8px;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            transition: 0.2s;
+        }
+
+
+        .nav-link:hover {
+
+            background:
+                rgba(255,255,255,0.12);
+        }
+
+
+        .register-link {
+
+            background: white;
+
+            color: #064e7a;
+        }
+
+
+        .register-link:hover {
+
+            background: #eaf5fb;
+        }
+
+
+        /* =========================================
+           HERO
+        ========================================= */
+
+        .hero {
+
+            min-height: 510px;
+
+            display: grid;
+
+            grid-template-columns: 55% 45%;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #064e7a,
+                    #087f8c
+                );
+
+            color: white;
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+
+        .hero::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 450px;
+
+            height: 450px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(255,255,255,0.055);
+
+            right: -180px;
+
+            top: -190px;
+        }
+
+
+        .hero::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 300px;
+
+            height: 300px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(255,255,255,0.045);
+
+            left: -160px;
+
+            bottom: -160px;
+        }
+
+
+        /* =========================================
+           HERO LEFT
+        ========================================= */
+
+        .hero-content {
+
+            position: relative;
+
+            z-index: 2;
+
+            padding:
+                70px 55px 70px 70px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+        }
+
+
+        .hero-badge {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            width: fit-content;
+
+            padding: 7px 13px;
+
+            border-radius: 20px;
+
+            background:
+                rgba(255,255,255,0.12);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.18);
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            letter-spacing: 0.5px;
+
+            margin-bottom: 22px;
+        }
+
+
+        .hero-content h1 {
+
+            font-size: 48px;
+
+            line-height: 1.12;
+
+            font-weight: 800;
+
+            max-width: 620px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .hero-content h1 span {
+
+            color: #a7f3d0;
+        }
+
+
+        .hero-description {
+
+            font-size: 16px;
+
+            line-height: 1.75;
+
+            color:
+                rgba(255,255,255,0.88);
+
+            max-width: 570px;
+
+            margin-bottom: 30px;
+        }
+
+
+        /* =========================================
+           HERO BUTTONS
+        ========================================= */
+
+        .hero-buttons {
+
+            display: flex;
+
+            gap: 13px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .primary-button {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding:
+                13px 23px;
+
+            background: white;
+
+            color: #065f73;
+
+            border-radius: 10px;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+            transition: 0.25s;
+        }
+
+
+        .primary-button:hover {
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 8px 20px
+                rgba(0,0,0,0.18);
+        }
+
+
+        .secondary-button {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding:
+                12px 23px;
+
+            background:
+                transparent;
+
+            color: white;
+
+            border:
+                1px solid
+                rgba(255,255,255,0.45);
+
+            border-radius: 10px;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+            transition: 0.25s;
+        }
+
+
+        .secondary-button:hover {
+
+            background:
+                rgba(255,255,255,0.10);
+        }
+
+
+        /* =========================================
+           HERO RIGHT
+        ========================================= */
+
+        .hero-visual {
+
+            position: relative;
+
+            z-index: 2;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 45px;
+        }
+
+
+        .dashboard-card {
+
+            width: 100%;
+
+            max-width: 360px;
+
+            background:
+                rgba(255,255,255,0.97);
+
+            border-radius: 20px;
+
+            padding: 25px;
+
+            box-shadow:
+                0 25px 55px
+                rgba(0,0,0,0.18);
+
+            color: #243b53;
+        }
+
+
+        .dashboard-title {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            margin-bottom: 22px;
+        }
+
+
+        .dashboard-icon {
+
+            width: 45px;
+
+            height: 45px;
+
+            border-radius: 13px;
+
+            background: #e5f6f4;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 23px;
+        }
+
+
+        .dashboard-title h3 {
+
+            font-size: 16px;
+
+            color: #102a43;
+        }
+
+
+        .dashboard-title p {
+
+            font-size: 11px;
+
+            color: #829ab1;
+
+            margin-top: 3px;
+        }
+
+
+        /* =========================================
+           MATCH CARD
+        ========================================= */
+
+        .match-card {
+
+            padding: 15px;
+
+            border:
+                1px solid #e2e8f0;
+
+            border-radius: 13px;
+
+            margin-bottom: 12px;
+
+            background: #f8fafc;
+        }
+
+
+        .match-top {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 10px;
+        }
+
+
+        .match-name {
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            color: #243b53;
+        }
+
+
+        .match-score {
+
+            font-size: 12px;
+
+            font-weight: 800;
+
+            color: #087f8c;
+
+            background: #e5f6f4;
+
+            padding: 4px 8px;
+
+            border-radius: 10px;
+        }
+
+
+        .match-bar {
+
+            height: 7px;
+
+            background: #e2e8f0;
+
+            border-radius: 10px;
+
+            overflow: hidden;
+        }
+
+
+        .match-progress {
+
+            height: 100%;
+
+            width: 92%;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #087f8c,
+                    #34d399
+                );
+
+            border-radius: 10px;
+        }
+
+
+        .match-progress.second {
+
+            width: 78%;
+        }
+
+
+        .match-progress.third {
+
+            width: 67%;
+        }
+
+
+        .ai-label {
+
+            margin-top: 20px;
+
+            padding: 11px;
+
+            border-radius: 10px;
+
+            background: #f0fdf4;
+
+            color: #166534;
+
+            text-align: center;
+
+            font-size: 11px;
+
+            font-weight: 600;
+        }
+
+
+        /* =========================================
+           FEATURES
+        ========================================= */
+
+        .features {
+
+            padding:
+                65px 55px;
+
+            background: #ffffff;
+
+            text-align: center;
+        }
+
+
+        .section-label {
+
+            color: #087f8c;
+
+            font-size: 11px;
+
+            font-weight: 800;
+
+            letter-spacing: 1px;
+
+            text-transform: uppercase;
+
+            margin-bottom: 9px;
+        }
+
+
+        .features h2 {
+
+            font-size: 30px;
+
+            color: #102a43;
+
+            margin-bottom: 10px;
+        }
+
+
+        .section-description {
+
+            max-width: 650px;
+
+            margin:
+                0 auto 38px;
+
+            color: #718096;
+
+            font-size: 14px;
+
+            line-height: 1.7;
+        }
+
+
+        .feature-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 20px;
+
+            max-width: 1000px;
+
+            margin: auto;
+        }
+
+
+        .feature-card {
+
+            padding: 28px 22px;
+
+            border:
+                1px solid #e2e8f0;
+
+            border-radius: 16px;
+
+            background: #f8fbfd;
+
+            transition: 0.25s;
+        }
+
+
+        .feature-card:hover {
+
+            transform:
+                translateY(-5px);
+
+            box-shadow:
+                0 12px 30px
+                rgba(0,0,0,0.08);
+        }
+
+
+        .feature-icon {
+
+            width: 55px;
+
+            height: 55px;
+
+            margin:
+                0 auto 16px;
+
+            border-radius: 15px;
+
+            background: #e5f6f4;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 25px;
+        }
+
+
+        .feature-card h3 {
+
+            font-size: 16px;
+
+            color: #243b53;
+
+            margin-bottom: 8px;
+        }
+
+
+        .feature-card p {
+
+            color: #718096;
+
+            font-size: 12px;
+
+            line-height: 1.65;
+        }
+
+
+        /* =========================================
+           HOW IT WORKS
+        ========================================= */
+
+        .how-section {
+
+            padding:
+                60px 55px;
+
+            background:
+                #f4f9fc;
+
+            text-align: center;
+        }
+
+
+        .steps-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 25px;
+
+            max-width: 900px;
+
+            margin: 35px auto 0;
+        }
+
+
+        .how-step {
+
+            position: relative;
+
+            padding: 25px;
+        }
+
+
+        .how-number {
+
+            width: 45px;
+
+            height: 45px;
+
+            margin:
+                0 auto 15px;
+
+            border-radius: 50%;
+
+            background: #087f8c;
+
+            color: white;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-weight: 800;
+
+            font-size: 13px;
+        }
+
+
+        .how-step h3 {
+
+            color: #243b53;
+
+            font-size: 15px;
+
+            margin-bottom: 7px;
+        }
+
+
+        .how-step p {
+
+            color: #718096;
+
+            font-size: 12px;
+
+            line-height: 1.6;
+        }
+
+
+        /* =========================================
+           FOOTER
+        ========================================= */
+
+        footer {
+
+            background:
+                #102a43;
+
+            color:
+                rgba(255,255,255,0.75);
+
+            padding:
+                25px 35px;
+
+            text-align: center;
+
+            font-size: 11px;
+
+            line-height: 1.7;
+        }
+
+
+        footer strong {
+
+            color: white;
+        }
+
+
+        /* =========================================
+           TABLET
+        ========================================= */
+
+        @media (max-width: 850px) {
+
+            .institution-header {
+
+                padding: 15px;
+
+                gap: 12px;
+            }
+
+
+            .pkiet-logo img {
+
+                width: 65px;
+
+                height: 90px;
+            }
+
+
+            .ptu-logo img {
+
+                width: 58px;
+
+                height: 85px;
+            }
+
+
+            .institution-text h2 {
+
+                font-size: 15px;
+            }
+
+
+            .institution-text h3 {
+
+                font-size: 14px;
+            }
+
+
+            .institution-text p {
+
+                font-size: 10px;
+            }
+
+
+            .navbar {
+
+                padding:
+                    15px 25px;
+            }
+
+
+            .hero {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .hero-content {
+
+                padding:
+                    55px 40px;
+            }
+
+
+            .hero-content h1 {
+
+                font-size: 40px;
+            }
+
+
+            .hero-visual {
+
+                padding:
+                    20px 40px 55px;
+            }
+
+
+            .feature-grid,
+            .steps-grid {
+
+                grid-template-columns: 1fr;
+            }
+        }
+
+
+        /* =========================================
+           MOBILE
+        ========================================= */
+
+        @media (max-width: 550px) {
+
+            .institution-header {
+
+                padding:
+                    12px 6px;
+
+                gap: 5px;
+            }
+
+
+            .pkiet-logo img {
+
+                width: 45px;
+
+                height: 68px;
+            }
+
+
+            .ptu-logo img {
+
+                width: 40px;
+
+                height: 64px;
+            }
+
+
+            .institution-text h2 {
+
+                font-size: 9px;
+            }
+
+
+            .institution-text h3 {
+
+                font-size: 8px;
+            }
+
+
+            .institution-text p {
+
+                font-size: 6px;
+
+                line-height: 1.3;
+            }
+
+
+            .navbar {
+
+                padding:
+                    12px 15px;
+            }
+
+
+            .brand {
+
+                font-size: 14px;
+            }
+
+
+            .brand-icon {
+
+                width: 29px;
+
+                height: 29px;
+
+                font-size: 15px;
+            }
+
+
+            .nav-link {
+
+                padding:
+                    7px 10px;
+
+                font-size: 11px;
+            }
+
+
+            .hero-content {
+
+                padding:
+                    45px 25px;
+            }
+
+
+            .hero-content h1 {
+
+                font-size: 34px;
+            }
+
+
+            .hero-description {
+
+                font-size: 14px;
+            }
+
+
+            .hero-buttons {
+
+                flex-direction: column;
+            }
+
+
+            .primary-button,
+            .secondary-button {
+
+                width: 100%;
+            }
+
+
+            .hero-visual {
+
+                padding:
+                    15px 25px 45px;
+            }
+
+
+            .features {
+
+                padding:
+                    50px 25px;
+            }
+
+
+            .features h2 {
+
+                font-size: 25px;
+            }
+
+
+            .how-section {
+
+                padding:
+                    50px 25px;
+            }
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
-<h1>AI-Powered Smart Campus Lost and Found</h1>
 
-<p>
-    Find your lost belongings using AI-powered matching.
-</p>
+<div class="page-container">
 
-<a href="/register">
-    <button>Register</button>
-</a>
 
-<a href="/login">
-    <button>Login</button>
-</a>
+    <!-- =========================================
+         INSTITUTION HEADER
+    ========================================== -->
+
+    <header class="institution-header">
+
+
+        <!-- PKIET LOGO -->
+
+        <div class="pkiet-logo">
+
+            <img
+                src="{{ url_for('static', filename='images/pkiet-logo.png') }}"
+                alt="PKIET Logo"
+            >
+
+        </div>
+
+
+        <!-- INSTITUTION NAME -->
+
+        <div class="institution-text">
+
+            <h2>
+                PERUNTHALAIVAR KAMARAJAR
+            </h2>
+
+            <h3>
+                INSTITUTE OF ENGINEERING AND TECHNOLOGY
+            </h3>
+
+            <p>
+                (Constituent College of Puducherry Technological University)
+            </p>
+
+            <p>
+                Nedungadu (P), Karaikal - 609 603.
+            </p>
+
+        </div>
+
+
+        <!-- PTU LOGO -->
+
+        <div class="ptu-logo">
+
+            <img
+                src="{{ url_for('static', filename='images/ptu-logo.png') }}"
+                alt="Puducherry Technological University Logo"
+            >
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================================
+         NAVIGATION
+    ========================================== -->
+
+    <nav class="navbar">
+
+
+        <a
+            href="/"
+            class="brand"
+        >
+
+            <span class="brand-icon">
+                🔎
+            </span>
+
+            Smart Campus
+
+        </a>
+
+
+        <div class="nav-links">
+
+            <a
+                href="/login"
+                class="nav-link"
+            >
+                Login
+            </a>
+
+            <a
+                href="/register"
+                class="nav-link register-link"
+            >
+                Register
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- =========================================
+         HERO SECTION
+    ========================================== -->
+
+    <section class="hero">
+
+
+        <!-- LEFT -->
+
+        <div class="hero-content">
+
+
+            <div class="hero-badge">
+
+                🤖
+
+                AI-POWERED CAMPUS PLATFORM
+
+            </div>
+
+
+            <h1>
+
+                Find What You Lost.
+                <br>
+
+                <span>
+                    Return What You Found.
+                </span>
+
+            </h1>
+
+
+            <p class="hero-description">
+
+                Smart Campus Lost & Found helps students
+                report lost and found belongings and uses
+                intelligent similarity analysis to identify
+                potential matches across the campus.
+
+            </p>
+
+
+            <div class="hero-buttons">
+
+                <a
+                    href="/register"
+                    class="primary-button"
+                >
+                    Create Student Account →
+                </a>
+
+
+                <a
+                    href="/login"
+                    class="secondary-button"
+                >
+                    Sign In
+                </a>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- RIGHT -->
+
+        <div class="hero-visual">
+
+
+            <div class="dashboard-card">
+
+
+                <div class="dashboard-title">
+
+
+                    <div class="dashboard-icon">
+                        🤖
+                    </div>
+
+
+                    <div>
+
+                        <h3>
+                            AI Match Analysis
+                        </h3>
+
+                        <p>
+                            Potential matches detected
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- MATCH 1 -->
+
+                <div class="match-card">
+
+                    <div class="match-top">
+
+                        <span class="match-name">
+                            Lost: Black Wallet
+                        </span>
+
+                        <span class="match-score">
+                            92%
+                        </span>
+
+                    </div>
+
+                    <div class="match-bar">
+
+                        <div class="match-progress"></div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- MATCH 2 -->
+
+                <div class="match-card">
+
+                    <div class="match-top">
+
+                        <span class="match-name">
+                            Found: Student Wallet
+                        </span>
+
+                        <span class="match-score">
+                            78%
+                        </span>
+
+                    </div>
+
+                    <div class="match-bar">
+
+                        <div
+                            class="match-progress second">
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- MATCH 3 -->
+
+                <div class="match-card">
+
+                    <div class="match-top">
+
+                        <span class="match-name">
+                            Description Similarity
+                        </span>
+
+                        <span class="match-score">
+                            67%
+                        </span>
+
+                    </div>
+
+                    <div class="match-bar">
+
+                        <div
+                            class="match-progress third">
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="ai-label">
+
+                    ✓ AI analysis completed successfully
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         FEATURES
+    ========================================== -->
+
+    <section class="features">
+
+
+        <div class="section-label">
+            PLATFORM FEATURES
+        </div>
+
+
+        <h2>
+            Smart Lost & Found for Your Campus
+        </h2>
+
+
+        <p class="section-description">
+
+            A centralized platform designed to make
+            reporting, discovering, and matching
+            lost and found belongings easier for
+            students.
+
+        </p>
+
+
+        <div class="feature-grid">
+
+
+            <!-- FEATURE 1 -->
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    📝
+                </div>
+
+                <h3>
+                    Easy Reporting
+                </h3>
+
+                <p>
+
+                    Quickly report lost or found
+                    belongings with descriptions,
+                    categories, locations, dates,
+                    colors, and images.
+
+                </p>
+
+            </div>
+
+
+            <!-- FEATURE 2 -->
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    🤖
+                </div>
+
+                <h3>
+                    AI Matching
+                </h3>
+
+                <p>
+
+                    The system compares item
+                    descriptions, categories, colors,
+                    locations, dates, and images to
+                    identify potential matches.
+
+                </p>
+
+            </div>
+
+
+            <!-- FEATURE 3 -->
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    🔔
+                </div>
+
+                <h3>
+                    Smart Notifications
+                </h3>
+
+                <p>
+
+                    Receive notifications when
+                    relevant lost and found reports
+                    or potential matches are detected.
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         HOW IT WORKS
+    ========================================== -->
+
+    <section class="how-section">
+
+
+        <div class="section-label">
+            HOW IT WORKS
+        </div>
+
+
+        <h2>
+            Three Simple Steps
+        </h2>
+
+
+        <p class="section-description">
+
+            Getting started with Smart Campus
+            Lost & Found is simple.
+
+        </p>
+
+
+        <div class="steps-grid">
+
+
+            <!-- STEP 1 -->
+
+            <div class="how-step">
+
+                <div class="how-number">
+                    01
+                </div>
+
+                <h3>
+                    Report
+                </h3>
+
+                <p>
+
+                    Submit details about the item
+                    you lost or found.
+
+                </p>
+
+            </div>
+
+
+            <!-- STEP 2 -->
+
+            <div class="how-step">
+
+                <div class="how-number">
+                    02
+                </div>
+
+                <h3>
+                    AI Analysis
+                </h3>
+
+                <p>
+
+                    The system analyzes the available
+                    information and searches for
+                    potential matches.
+
+                </p>
+
+            </div>
+
+
+            <!-- STEP 3 -->
+
+            <div class="how-step">
+
+                <div class="how-number">
+                    03
+                </div>
+
+                <h3>
+                    Connect
+                </h3>
+
+                <p>
+
+                    Review potential matches and
+                    continue the claim process.
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         FOOTER
+    ========================================== -->
+
+    <footer>
+
+        <strong>
+            Smart Campus Lost & Found
+        </strong>
+
+        <br>
+
+        PKIET · Puducherry Technological University
+
+        <br>
+
+        © 2026 Smart Campus Lost & Found
+
+    </footer>
+
+
+</div>
+
 
 </body>
 

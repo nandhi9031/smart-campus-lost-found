@@ -1,29 +1,883 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Login | Smart Campus Lost & Found</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #eaf4ff, #f7fbff);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 25px;
+            color: #1f2937;
+        }
+
+        .main-container {
+            width: 100%;
+            max-width: 1100px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        /* =====================================
+           INSTITUTION HEADER
+        ====================================== */
+
+        .institution-header {
+            width: 100%;
+            background: white;
+            padding: 22px 35px;
+            border-bottom: 1px solid #e5e7eb;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 25px;
+        }
+
+        .institution-logo-left,
+        .institution-logo-right {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .institution-logo-left img {
+            width: 85px;
+            height: 115px;
+            object-fit: contain;
+        }
+
+        .institution-logo-right img {
+            width: 75px;
+            height: 105px;
+            object-fit: contain;
+        }
+
+        .institution-details {
+            text-align: center;
+            flex: 1;
+        }
+
+        .institution-details h2 {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: #111827;
+            line-height: 1.5;
+        }
+
+        .institution-details h3 {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: #111827;
+            line-height: 1.5;
+        }
+
+        .institution-details p {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 15px;
+            color: #111827;
+            margin-top: 5px;
+            line-height: 1.5;
+        }
+
+        .institution-details .address {
+            margin-top: 2px;
+        }
+
+        /* =====================================
+           CONTENT AREA
+        ====================================== */
+
+        .content-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 560px;
+        }
+
+        /* =====================================
+           LEFT PROJECT PANEL
+        ====================================== */
+
+        .project-panel {
+            background: linear-gradient(
+                145deg,
+                #073b76,
+                #0b63ad
+            );
+
+            color: white;
+            padding: 55px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-panel::before {
+            content: "";
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.06);
+            top: -120px;
+            right: -120px;
+        }
+
+        .project-panel::after {
+            content: "";
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+            bottom: -100px;
+            left: -100px;
+        }
+
+        .project-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .project-icon {
+            width: 65px;
+            height: 65px;
+            border-radius: 18px;
+            background: rgba(255,255,255,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 31px;
+            margin-bottom: 20px;
+        }
+
+        .project-title {
+            font-size: 34px;
+            line-height: 1.2;
+            font-weight: 800;
+            margin-bottom: 18px;
+        }
+
+        .project-title span {
+            color: #8fd5ff;
+        }
+
+        .project-description {
+            font-size: 15px;
+            line-height: 1.7;
+            color: rgba(255,255,255,0.9);
+            max-width: 450px;
+        }
+
+        .features {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+        }
+
+        .feature-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(255,255,255,0.14);
+            border-radius: 9px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* =====================================
+           LOGIN PANEL
+        ====================================== */
+
+        .login-panel {
+            padding: 55px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-heading {
+            margin-bottom: 30px;
+        }
+
+        .login-heading .small-title {
+            color: #1261a0;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.4px;
+            margin-bottom: 8px;
+        }
+
+        .login-heading h1 {
+            font-size: 32px;
+            color: #102a43;
+            margin-bottom: 8px;
+            font-weight: 800;
+        }
+
+        .login-heading p {
+            font-size: 14px;
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        /* =====================================
+           FORM
+        ====================================== */
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #253858;
+            margin-bottom: 8px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 17px;
+            color: #829ab1;
+            pointer-events: none;
+        }
+
+        .form-control {
+            width: 100%;
+            height: 52px;
+            border: 1.5px solid #d9e2ec;
+            border-radius: 12px;
+
+            padding: 0 45px;
+
+            background: #f8fafc;
+            color: #243b53;
+            font-size: 14px;
+
+            outline: none;
+            transition: 0.25s;
+        }
+
+        .form-control:focus {
+            border-color: #1769aa;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(23,105,170,0.1);
+        }
+
+        .form-control::placeholder {
+            color: #9aa8b5;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+
+            border: none;
+            background: transparent;
+
+            cursor: pointer;
+            font-size: 17px;
+            color: #829ab1;
+        }
+
+        .password-toggle:hover {
+            color: #1769aa;
+        }
+
+        /* =====================================
+           LOGIN BUTTON
+        ====================================== */
+
+        .login-button {
+            width: 100%;
+            height: 52px;
+
+            border: none;
+            border-radius: 12px;
+
+            background: linear-gradient(
+                135deg,
+                #0866b6,
+                #0d4f91
+            );
+
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+
+            cursor: pointer;
+
+            margin-top: 5px;
+
+            box-shadow: 0 8px 20px rgba(8,102,182,0.25);
+
+            transition: 0.25s;
+        }
+
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(8,102,182,0.32);
+        }
+
+        .login-button:active {
+            transform: translateY(0);
+        }
+
+        /* =====================================
+           REGISTER
+        ====================================== */
+
+        .register-section {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 22px;
+            border-top: 1px solid #edf2f7;
+        }
+
+        .register-section p {
+            font-size: 14px;
+            color: #718096;
+        }
+
+        .register-link {
+            display: inline-block;
+            margin-top: 7px;
+
+            color: #1261a0;
+            text-decoration: none;
+
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .register-link:hover {
+            text-decoration: underline;
+        }
+
+        .security-note {
+            margin-top: 22px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 7px;
+
+            font-size: 12px;
+            color: #718096;
+        }
+
+        .security-icon {
+            color: #2f855a;
+        }
+
+        .footer-text {
+            text-align: center;
+            margin-top: 20px;
+
+            color: #a0aec0;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        /* =====================================
+           TABLET
+        ====================================== */
+
+        @media (max-width: 850px) {
+
+            body {
+                padding: 15px;
+            }
+
+            .institution-header {
+                padding: 20px;
+                gap: 15px;
+            }
+
+            .institution-logo-left img {
+                width: 70px;
+                height: 95px;
+            }
+
+            .institution-logo-right img {
+                width: 62px;
+                height: 90px;
+            }
+
+            .institution-details h2 {
+                font-size: 16px;
+            }
+
+            .institution-details h3 {
+                font-size: 15px;
+            }
+
+            .institution-details p {
+                font-size: 12px;
+            }
+
+            .content-area {
+                grid-template-columns: 1fr;
+            }
+
+            .project-panel {
+                padding: 40px;
+            }
+
+            .login-panel {
+                padding: 40px;
+            }
+        }
+
+        /* =====================================
+           MOBILE
+        ====================================== */
+
+        @media (max-width: 550px) {
+
+            body {
+                padding: 0;
+                align-items: stretch;
+            }
+
+            .main-container {
+                border-radius: 0;
+                min-height: 100vh;
+            }
+
+            .institution-header {
+                padding: 15px 10px;
+                gap: 8px;
+            }
+
+            .institution-logo-left img {
+                width: 48px;
+                height: 75px;
+            }
+
+            .institution-logo-right img {
+                width: 43px;
+                height: 70px;
+            }
+
+            .institution-details h2 {
+                font-size: 11px;
+            }
+
+            .institution-details h3 {
+                font-size: 10px;
+            }
+
+            .institution-details p {
+                font-size: 8px;
+                line-height: 1.4;
+            }
+
+            .project-panel {
+                padding: 35px 25px;
+            }
+
+            .project-title {
+                font-size: 27px;
+            }
+
+            .project-description {
+                font-size: 13px;
+            }
+
+            .login-panel {
+                padding: 35px 25px;
+            }
+
+            .login-heading h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<h2>Student Login</h2>
+<div class="main-container">
 
-<form method="POST">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-    <label>Email:</label><br>
-    <input type="email" name="email" required><br><br>
+    <!-- =====================================
+         PKIET + PTU INSTITUTION HEADER
+    ====================================== -->
 
-    <label>Password:</label><br>
-    <input type="password" name="password" required><br><br>
+    <div class="institution-header">
 
-    <button type="submit">Login</button>
+        <!-- PKIET Logo - LEFT -->
+        <div class="institution-logo-left">
 
-</form>
+            <img
+                src="{{ url_for('static', filename='images/pkiet-logo.png') }}"
+                alt="PKIET Logo"
+            >
 
-<br>
+        </div>
 
-<a href="/register">Create New Account</a>
+
+        <!-- Institution Text - CENTER -->
+        <div class="institution-details">
+
+            <h2>
+                PERUNTHALAIVAR KAMARAJAR
+            </h2>
+
+            <h3>
+                INSTITUTE OF ENGINEERING AND TECHNOLOGY
+            </h3>
+
+            <p>
+                (Constituent College of Puducherry Technological University)
+            </p>
+
+            <p class="address">
+                Nedungadu (P), Karaikal - 609 603.
+            </p>
+
+        </div>
+
+
+        <!-- PTU Logo - RIGHT -->
+        <div class="institution-logo-right">
+
+            <img
+                src="{{ url_for('static', filename='images/ptu-logo.png') }}"
+                alt="Puducherry Technological University Logo"
+            >
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================
+         MAIN CONTENT
+    ====================================== -->
+
+    <div class="content-area">
+
+
+        <!-- =================================
+             PROJECT INFORMATION
+        ================================== -->
+
+        <div class="project-panel">
+
+            <div class="project-content">
+
+                <div class="project-icon">
+                    🔎
+                </div>
+
+                <h1 class="project-title">
+                    Smart Campus<br>
+                    <span>Lost & Found</span>
+                </h1>
+
+                <p class="project-description">
+                    An AI-powered campus platform that helps students
+                    report lost and found items and automatically
+                    identifies potential matches using intelligent
+                    similarity analysis.
+                </p>
+
+
+                <div class="features">
+
+                    <div class="feature">
+
+                        <div class="feature-icon">
+                            🤖
+                        </div>
+
+                        <span>
+                            AI-powered item matching
+                        </span>
+
+                    </div>
+
+
+                    <div class="feature">
+
+                        <div class="feature-icon">
+                            📷
+                        </div>
+
+                        <span>
+                            Image and description analysis
+                        </span>
+
+                    </div>
+
+
+                    <div class="feature">
+
+                        <div class="feature-icon">
+                            🔔
+                        </div>
+
+                        <span>
+                            Smart match notifications
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================
+             LOGIN
+        ================================== -->
+
+        <div class="login-panel">
+
+            <div class="login-heading">
+
+                <div class="small-title">
+                    Student Portal
+                </div>
+
+                <h1>
+                    Welcome Back
+                </h1>
+
+                <p>
+                    Sign in to access your Smart Campus
+                    Lost & Found account.
+                </p>
+
+            </div>
+
+
+            <!-- LOGIN FORM -->
+
+            <form method="POST">
+
+                <!-- CSRF -->
+                <input
+                    type="hidden"
+                    name="csrf_token"
+                    value="{{ csrf_token() }}"
+                >
+
+
+                <!-- EMAIL -->
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            ✉
+                        </span>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            class="form-control"
+                            placeholder="Enter your Gmail address"
+                            autocomplete="email"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            🔒
+                        </span>
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            class="form-control"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            id="passwordToggle"
+                            onclick="togglePassword()"
+                            aria-label="Show password"
+                        >
+                            👁
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- LOGIN -->
+
+                <button
+                    type="submit"
+                    class="login-button"
+                >
+                    Sign In
+                </button>
+
+            </form>
+
+
+            <!-- REGISTER -->
+
+            <div class="register-section">
+
+                <p>
+                    Don't have an account?
+                </p>
+
+                <a
+                    href="/register"
+                    class="register-link"
+                >
+                    Create New Account →
+                </a>
+
+            </div>
+
+
+            <!-- SECURITY -->
+
+            <div class="security-note">
+
+                <span class="security-icon">
+                    🔐
+                </span>
+
+                <span>
+                    Secure student authentication
+                </span>
+
+            </div>
+
+
+            <!-- FOOTER -->
+
+            <div class="footer-text">
+
+                © 2026 Smart Campus Lost & Found<br>
+
+                PKIET · Puducherry Technological University
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+function togglePassword() {
+
+    const password =
+        document.getElementById("password");
+
+    const button =
+        document.getElementById("passwordToggle");
+
+
+    if (password.type === "password") {
+
+        password.type = "text";
+
+        button.textContent = "🙈";
+
+        button.setAttribute(
+            "aria-label",
+            "Hide password"
+        );
+
+    } else {
+
+        password.type = "password";
+
+        button.textContent = "👁";
+
+        button.setAttribute(
+            "aria-label",
+            "Show password"
+        );
+
+    }
+
+}
+
+</script>
 
 </body>
 </html>
