@@ -933,97 +933,215 @@
 
         @media (max-width: 550px) {
 
-            body {
-
-                padding: 0;
-
-                align-items: stretch;
-            }
-
-
-            .page-container {
-
-                border-radius: 0;
-
-                min-height: 100vh;
-            }
-
-
             .institution-header {
 
-                padding:
-                    14px 8px;
+                padding: 12px 8px;
 
-                gap: 7px;
+                gap: 8px;
+
+                display: flex;
+
+                align-items: center;
+
+                justify-content: center;
+
+                min-height: 105px;
+            }
+
+
+            /* PKIET LOGO */
+
+            .pkiet-logo {
+
+                width: 55px;
+
+                min-width: 55px;
+
+                display: flex;
+
+                align-items: center;
+
+                justify-content: center;
             }
 
 
             .pkiet-logo img {
 
-                width: 48px;
+                width: 55px;
 
-                height: 72px;
+                height: 80px;
+
+                object-fit: contain;
+
+                display: block;
+            }
+
+
+            /* PTU LOGO */
+
+            .ptu-logo {
+
+                width: 50px;
+
+                min-width: 50px;
+
+                display: flex;
+
+                align-items: center;
+
+                justify-content: center;
             }
 
 
             .ptu-logo img {
 
-                width: 43px;
+                width: 50px;
 
-                height: 68px;
+                height: 75px;
+
+                object-fit: contain;
+
+                display: block;
+            }
+
+
+            /* INSTITUTION TEXT */
+
+            .institution-text {
+
+                flex: 1;
+
+                min-width: 0;
+
+                text-align: center;
             }
 
 
             .institution-text h2 {
 
-                font-size: 10px;
+                font-size: 9px;
+
+                line-height: 1.3;
+
+                white-space: normal;
             }
 
 
             .institution-text h3 {
 
-                font-size: 9px;
+                font-size: 8px;
+
+                line-height: 1.35;
+
+                white-space: normal;
             }
 
 
             .institution-text p {
 
-                font-size: 7px;
+                font-size: 6px;
 
-                line-height: 1.4;
+                line-height: 1.3;
+
+                margin-top: 2px;
             }
 
 
-            .welcome-panel {
+            /* NAVBAR */
+
+            .navbar {
+
+                padding: 12px 15px;
+            }
+
+
+            .brand {
+
+                font-size: 14px;
+            }
+
+
+            .brand-icon {
+
+                width: 29px;
+
+                height: 29px;
+
+                font-size: 15px;
+            }
+
+
+            .nav-link {
+
+                padding: 7px 10px;
+
+                font-size: 11px;
+            }
+
+
+            /* HERO */
+
+            .hero-content {
+
+                padding: 45px 25px;
+            }
+
+
+            .hero-content h1 {
+
+                font-size: 34px;
+            }
+
+
+            .hero-description {
+
+                font-size: 14px;
+            }
+
+
+            .hero-buttons {
+
+                flex-direction: column;
+            }
+
+
+            .primary-button,
+            .secondary-button {
+
+                width: 100%;
+            }
+
+
+            .hero-visual {
 
                 padding:
-                    38px 25px;
+                    15px 25px 45px;
             }
 
 
-            .welcome-panel h1 {
+            /* FEATURES */
 
-                font-size: 28px;
-            }
-
-
-            .welcome-description {
-
-                font-size: 13px;
-            }
-
-
-            .form-panel {
+            .features {
 
                 padding:
-                    38px 25px;
+                    50px 25px;
             }
 
 
-            .form-header h2 {
+            .features h2 {
 
-                font-size: 27px;
+                font-size: 25px;
             }
+
+
+            /* HOW IT WORKS */
+
+            .how-section {
+
+                padding:
+                    50px 25px;
+            }
+
         }
 
     </style>
