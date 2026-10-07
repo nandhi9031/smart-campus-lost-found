@@ -1412,6 +1412,34 @@ def matches():
         matches=match_results,
         best_match=best_match
     )
+@app.route('/admin/migrate-ai')
+def migrate_ai():
+
+    if 'user_id' not in session:
+        return "Login required.", 401
+
+    user = User.query.get(session['user_id'])
+
+    if not user or user.role != 'Admin':
+        return "Access Denied!", 403
+
+    try:
+        from sqlalchemy import text
+
+        db.session.execute(text("""
+            ALTER TABLE item_report
+            ADD COLUMN IF NOT EXISTS ai_analysis TEXT
+        """))
+
+        db.session.commit()
+
+        return "Database migration successful! ai_analysis column is ready."
+
+    except Exception as e:
+
+        db.session.rollback()
+
+        return f"Migration failed: {str(e)}", 500
 # ============================================================
 # ADMIN - VIEW REPORTS
 # ============================================================
