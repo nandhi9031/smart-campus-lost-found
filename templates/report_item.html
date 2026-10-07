@@ -1,67 +1,725 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Report {{ report_type }} Item</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Report {{ report_type }} Item | Smart Campus Lost & Found
+    </title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #1f2937;
+            min-height: 100vh;
+        }
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        .navbar {
+            background: #1e3a8a;
+            color: white;
+            padding: 16px 30px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+        }
+
+        .brand {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .back-btn {
+            color: white;
+            text-decoration: none;
+
+            border: 1px solid rgba(255,255,255,0.5);
+
+            padding: 8px 14px;
+
+            border-radius: 6px;
+
+            font-size: 14px;
+        }
+
+        .back-btn:hover {
+            background: white;
+            color: #1e3a8a;
+        }
+
+
+        /* =========================
+           MAIN CONTAINER
+        ========================= */
+
+        .container {
+            max-width: 800px;
+
+            margin: auto;
+
+            padding: 35px 20px 50px;
+        }
+
+
+        /* =========================
+           PAGE HEADER
+        ========================= */
+
+        .page-header {
+            background: white;
+
+            padding: 28px;
+
+            border-radius: 14px;
+
+            margin-bottom: 22px;
+
+            box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+
+            border: 1px solid #e5e7eb;
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+
+            color: #111827;
+
+            margin-bottom: 8px;
+        }
+
+        .page-header h1 span {
+            color: #2563eb;
+        }
+
+        .page-header p {
+            color: #6b7280;
+
+            line-height: 1.6;
+
+            font-size: 15px;
+        }
+
+
+        /* =========================
+           FORM CARD
+        ========================= */
+
+        .form-card {
+            background: white;
+
+            padding: 30px;
+
+            border-radius: 14px;
+
+            border: 1px solid #e5e7eb;
+
+            box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+        }
+
+
+        /* =========================
+           FORM GROUP
+        ========================= */
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-group label {
+            display: block;
+
+            font-weight: bold;
+
+            color: #374151;
+
+            margin-bottom: 8px;
+
+            font-size: 14px;
+        }
+
+        .required {
+            color: #dc2626;
+        }
+
+
+        /* =========================
+           INPUTS
+        ========================= */
+
+        input[type="text"],
+        input[type="date"],
+        textarea,
+        select {
+
+            width: 100%;
+
+            padding: 12px 13px;
+
+            border: 1px solid #d1d5db;
+
+            border-radius: 8px;
+
+            font-size: 15px;
+
+            font-family: inherit;
+
+            color: #111827;
+
+            background: white;
+
+            outline: none;
+
+            transition: 0.2s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        textarea:focus,
+        select:focus {
+
+            border-color: #2563eb;
+
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.10);
+        }
+
+        textarea {
+            resize: vertical;
+
+            min-height: 120px;
+
+            line-height: 1.5;
+        }
+
+
+        /* =========================
+           FILE UPLOAD
+        ========================= */
+
+        .file-box {
+            border: 2px dashed #cbd5e1;
+
+            background: #f8fafc;
+
+            padding: 20px;
+
+            border-radius: 10px;
+
+            text-align: center;
+        }
+
+        .file-icon {
+            font-size: 32px;
+
+            margin-bottom: 8px;
+        }
+
+        .file-box p {
+            color: #6b7280;
+
+            font-size: 13px;
+
+            margin-bottom: 12px;
+        }
+
+        input[type="file"] {
+            width: 100%;
+
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           AI INFORMATION BOX
+        ========================= */
+
+        .ai-info {
+
+            background: #eff6ff;
+
+            border: 1px solid #bfdbfe;
+
+            border-radius: 10px;
+
+            padding: 18px;
+
+            margin-bottom: 25px;
+        }
+
+        .ai-info h3 {
+            color: #1e40af;
+
+            font-size: 16px;
+
+            margin-bottom: 7px;
+        }
+
+        .ai-info p {
+            color: #4b5563;
+
+            font-size: 14px;
+
+            line-height: 1.6;
+        }
+
+
+        /* =========================
+           SUBMIT BUTTON
+        ========================= */
+
+        .submit-btn {
+
+            width: 100%;
+
+            background: #2563eb;
+
+            color: white;
+
+            border: none;
+
+            padding: 13px 18px;
+
+            border-radius: 8px;
+
+            font-size: 15px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s ease;
+        }
+
+        .submit-btn:hover {
+            background: #1d4ed8;
+        }
+
+
+        /* =========================
+           CANCEL / BACK
+        ========================= */
+
+        .bottom-link {
+            display: block;
+
+            text-align: center;
+
+            margin-top: 20px;
+
+            color: #2563eb;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+            font-weight: bold;
+        }
+
+        .bottom-link:hover {
+            text-decoration: underline;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        .footer {
+
+            text-align: center;
+
+            margin-top: 35px;
+
+            color: #9ca3af;
+
+            font-size: 13px;
+
+            line-height: 1.6;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 768px) {
+
+            .navbar {
+                padding: 14px 18px;
+            }
+
+            .brand {
+                font-size: 16px;
+            }
+
+            .back-btn {
+                padding: 6px 10px;
+
+                font-size: 12px;
+            }
+
+            .container {
+                padding: 20px 15px 40px;
+            }
+
+            .page-header {
+                padding: 22px;
+            }
+
+            .page-header h1 {
+                font-size: 24px;
+            }
+
+            .form-card {
+                padding: 22px;
+            }
+
+        }
+
+
+        @media (max-width: 400px) {
+
+            .brand {
+                font-size: 14px;
+            }
+
+            .page-header h1 {
+                font-size: 22px;
+            }
+
+            .form-card {
+                padding: 18px;
+            }
+
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
-<h2>Report {{ report_type }} Item</h2>
 
-<form method="POST" enctype="multipart/form-data">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<!-- =========================
+     NAVBAR
+========================= -->
 
-    <label>Item Name:</label><br>
-    <input type="text" name="title" required>
-    <br><br>
+<nav class="navbar">
 
-    <label>Description:</label><br>
-    <textarea name="description" rows="5" cols="40" required></textarea>
-    <br><br>
+    <div class="brand">
+        🎓 Smart Campus Lost & Found
+    </div>
 
-    <label>Category:</label><br>
-    <select name="category">
-        <option value="Electronics">Electronics</option>
-        <option value="Documents">Documents</option>
-        <option value="Bags">Bags</option>
-        <option value="Books">Books</option>
-        <option value="Clothing">Clothing</option>
-        <option value="Accessories">Accessories</option>
-        <option value="Other">Other</option>
-    </select>
-    <br><br>
-
-    <label>Color:</label><br>
-    <input type="text" name="color">
-    <br><br>
-
-    <label>Location:</label><br>
-    <input type="text" name="location" required>
-    <br><br>
-
-    <label>Date:</label><br>
-    <input
-        type="date"
-        name="date"
-        max="{{ today }}"
-        required
+    <a
+        href="/dashboard"
+        class="back-btn"
     >
-    <br><br>
+        ← Dashboard
+    </a>
 
-    <label>Upload Image:</label><br>
-    <input type="file" name="image" accept="image/*">
-    <br><br>
+</nav>
 
-    <button type="submit">
-        Submit {{ report_type }} Report
-    </button>
 
-</form>
+<!-- =========================
+     MAIN CONTENT
+========================= -->
 
-<br>
+<div class="container">
 
-<a href="/dashboard">Back to Dashboard</a>
+
+    <!-- PAGE HEADER -->
+
+    <div class="page-header">
+
+        <h1>
+            Report
+            <span>{{ report_type }}</span>
+            Item
+        </h1>
+
+        {% if report_type == 'Lost' %}
+
+            <p>
+                Tell us about the item you lost on campus.
+                Providing accurate details and an image will
+                help the AI system identify possible matches.
+            </p>
+
+        {% else %}
+
+            <p>
+                Tell us about the item you found on campus.
+                The report will be reviewed by an administrator
+                before it becomes available for AI matching.
+            </p>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- AI INFORMATION -->
+
+    <div class="ai-info">
+
+        <h3>
+            🤖 AI-Powered Matching
+        </h3>
+
+        <p>
+            The system will analyze the item description,
+            category, color, location, date and uploaded image
+            to identify possible Lost and Found matches.
+        </p>
+
+    </div>
+
+
+    <!-- FORM -->
+
+    <div class="form-card">
+
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+        >
+
+            <!-- CSRF -->
+
+            <input
+                type="hidden"
+                name="csrf_token"
+                value="{{ csrf_token() }}"
+            >
+
+
+            <!-- ITEM NAME -->
+
+            <div class="form-group">
+
+                <label>
+                    Item Name
+                    <span class="required">*</span>
+                </label>
+
+                <input
+                    type="text"
+                    name="title"
+                    placeholder="Example: Black Wallet"
+                    required
+                >
+
+            </div>
+
+
+            <!-- DESCRIPTION -->
+
+            <div class="form-group">
+
+                <label>
+                    Description
+                    <span class="required">*</span>
+                </label>
+
+                <textarea
+                    name="description"
+                    placeholder="Describe the item clearly, including important details such as brand, size, marks, stickers, or other identifying features."
+                    required
+                ></textarea>
+
+            </div>
+
+
+            <!-- CATEGORY -->
+
+            <div class="form-group">
+
+                <label>
+                    Category
+                </label>
+
+                <select name="category">
+
+                    <option value="Electronics">
+                        Electronics
+                    </option>
+
+                    <option value="Documents">
+                        Documents
+                    </option>
+
+                    <option value="Bags">
+                        Bags
+                    </option>
+
+                    <option value="Books">
+                        Books
+                    </option>
+
+                    <option value="Clothing">
+                        Clothing
+                    </option>
+
+                    <option value="Accessories">
+                        Accessories
+                    </option>
+
+                    <option value="Other">
+                        Other
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- COLOR -->
+
+            <div class="form-group">
+
+                <label>
+                    Color
+                </label>
+
+                <input
+                    type="text"
+                    name="color"
+                    placeholder="Example: Black, Blue, Gold"
+                >
+
+            </div>
+
+
+            <!-- LOCATION -->
+
+            <div class="form-group">
+
+                <label>
+                    Location
+                    <span class="required">*</span>
+                </label>
+
+                <input
+                    type="text"
+                    name="location"
+                    placeholder="Example: Near CSE Block"
+                    required
+                >
+
+            </div>
+
+
+            <!-- DATE -->
+
+            <div class="form-group">
+
+                <label>
+                    Date
+                    <span class="required">*</span>
+                </label>
+
+                <input
+                    type="date"
+                    name="date"
+                    max="{{ today }}"
+                    required
+                >
+
+            </div>
+
+
+            <!-- IMAGE -->
+
+            <div class="form-group">
+
+                <label>
+                    Upload Image
+                </label>
+
+                <div class="file-box">
+
+                    <div class="file-icon">
+                        📷
+                    </div>
+
+                    <p>
+                        Upload a clear image of the item
+                        to improve visual matching.
+                    </p>
+
+                    <input
+                        type="file"
+                        name="image"
+                        accept="image/*"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- SUBMIT -->
+
+            <button
+                type="submit"
+                class="submit-btn"
+            >
+                {% if report_type == 'Lost' %}
+                    🔴 Submit Lost Report
+                {% else %}
+                    🟢 Submit Found Report
+                {% endif %}
+            </button>
+
+
+        </form>
+
+
+        <!-- BACK -->
+
+        <a
+            href="/dashboard"
+            class="bottom-link"
+        >
+            ← Back to Dashboard
+        </a>
+
+    </div>
+
+
+    <!-- FOOTER -->
+
+    <div class="footer">
+
+        Smart Campus Lost & Found System
+        <br>
+
+        AI-powered item matching for campus communities
+
+    </div>
+
+
+</div>
+
 
 </body>
 
